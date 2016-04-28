@@ -1,0 +1,29 @@
+{
+  "name": "kamtohodit.cz",
+  "version": "0.0.1",
+  "description": "Backend webu kamtohodit.cz",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/michalkral/kamtohodit.git"
+  },
+  "keywords": [
+    "trash",
+    "recycling"
+  ],
+  "author": "Jakub kub1x Podlaha, Michal Kral",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michalkral/kamtohodit/issues"
+  },
+  "homepage": "https://github.com/michalkral/kamtohodit#readme",
+  "dependencies": {
+    "elasticsearch": "^11.0.1",
+    "express": "^4.13.4",
+    "mustache": "^2.2.1",
+    "mustache-express": "^1.2.2"
+  }
+}
