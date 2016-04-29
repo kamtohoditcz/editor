@@ -1,5 +1,6 @@
 var express = require('express');
 var mustacheExpress = require('mustache-express');
+var _ = require('lodash');
 
 var elasticsearch = require('elasticsearch');
 var es = new elasticsearch.Client({
@@ -10,6 +11,13 @@ var es = new elasticsearch.Client({
 app = express();
 
 var viewsDir = __dirname + '/views';
+
+var odpadyOdpadek = function (options) {
+  return _.assign({
+    index: 'odpady',
+    type: 'odpadek'
+  }, options);
+};
 
 // Register '.mustache' extension with The Mustache Express
 app.engine('mustache', mustacheExpress());
@@ -32,12 +40,11 @@ app.get('/', function(req, res) {
   });
 });
 
+// get all of them
 app.get('/odpadky', function(req, res) {
-  es.search({
-    index: 'odpady', 
-    type: 'odpadek'
-  }).then(function(resp){
-    var odpadky = resp.hits.hits.map(function(hit){ return hit._source; });
+  es.search(odpadyOdpadek())
+  .then(function(resp){
+    var odpadky = resp.hits.hits.map(function(hit){ return _.assign(hit._source, {id: hit._id}); });
     console.log("got:" + JSON.stringify(odpadky, null, 2));
     res.render('odpadky', {
       homepage: {
@@ -47,5 +54,14 @@ app.get('/odpadky', function(req, res) {
     });
   });
 });
+
+// get single one
+app.get('/odpadek/:id', function (req, res) {
+  es.get(odpadyOdpadek({id: req.params.id}))
+  .then(function(resp){
+    res.render('odpadek', resp._source);
+  });
+});
+
 
 app.listen(process.env.PORT || 3000);

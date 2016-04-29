@@ -23,6 +23,7 @@
   "dependencies": {
     "elasticsearch": "^11.0.1",
     "express": "^4.13.4",
+    "lodash": "^4.11.1",
     "mustache": "^2.2.1",
     "mustache-express": "^1.2.2"
   }
