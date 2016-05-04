@@ -1,8 +1,12 @@
 var express = require('express');
 var mustacheExpress = require('mustache-express');
 var config = require('config');
+var bodyParser = require('body-parser');
 
 app = express();
+
+// add body parsing middleware
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // Register '.mustache' extension with The Mustache Express
 app.engine('mustache', mustacheExpress());

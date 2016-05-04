@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<form action="/odpadky/{{id}}/upravit" method="post" name="odpadek-upravit" enctype="application/x-www-form-urlencoded">
+		<h1>Upravit odpadek</h1>
+		<p>
+			Jmeno:
+			<input name="name" value="{{name}}" />
+		</p>
+		<p>
+			Popis:
+			<textarea name="content">{{content}}</textarea>
+		</p>
+		<p>
+			<input type="submit" value="odeslat" />
+			<a href="/odpadky/{{id}}">zrušit</a> |
+			<a href="/odpadky/{{id}}/upravit">obnovit formulář</a> |
+			<a href="/odpadky">seznam odpadků</a>
+		</p>
+	</form>
+</body>
+</html>

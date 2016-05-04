@@ -1,18 +1,21 @@
 var _ = require('lodash');
 var es = require('./elastic');
+var moment = require('moment');
 
 var odpadyOdpadek = function (options) {
 	return _.assign({
 		index: 'odpadky',
 		type: 'odpadek'
+		//size: 20 by default
 	}, options);
 };
 
+var esResult2doc = function (result) {
+	return _.assign(result._source, {id: result._id});
+}
+
 var esResults2docs = function (results) {
-	// unwrap the resulting documents and add the 'id' property
-	return results.hits.hits.map(function (hit) {
-		return _.assign(hit._source, {id: hit._id});
-	});
+	return results.hits.hits.map(esResult2doc);
 }
 
 module.exports = {
@@ -21,14 +24,24 @@ module.exports = {
 		.then(esResults2docs);
 	},
 
-	getTrashById: function (id) {
-		return es.get(odpadyOdpadek({id: id}))
-		.then(function (resp) {
-			return resp._source
+	createTrash: function (losDatos) {
+		losDatos.creation_date = losDatos.last_edit_date = moment().formmat();
+		return es.create(odpadyOdpadek({body: losDatos}))
+		.then(function (result) {
+			return result._id;
 		});
 	},
 
-	// TODO
+	getTrashById: function (id) {
+		return es.get(odpadyOdpadek({id: id}))
+		.then(esResult2doc);
+	},
+
+	updateTrashById: function (id, losDatos) {
+		losDatos.last_edit_date = moment().format();
+		return es.update(odpadyOdpadek({id: id, body: {doc: losDatos}}));
+	},
+
 	deleteTrashById: function (id) {
 		return es.delete(odpadyOdpadek({id: id}));
 	},
