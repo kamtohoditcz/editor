@@ -25,7 +25,7 @@ var convertDates = function (odpadek) {
 router.get('/', function (req, res) {
 	trash.listAll()
 	.then(function(odpadky){
-		res.render('odpadek/odpadky', {
+		res.render('trash/list', {
 			odpadky: odpadky
 		});
 	})
@@ -36,11 +36,11 @@ router.get('/', function (req, res) {
 
 // create - put
 router.get('/novy', function (req, res) {
-	res.render('odpadek/odpadek-novy');
+	res.render('trash/form');
 });
 
-// create - post
-router.post('/novy', function (req, res) {
+// create - put 
+router.put('/', function (req, res) {
 	var losDatos = req.body;
 	trash.create(losDatos)
 	.then(function(id){
@@ -54,7 +54,7 @@ router.get('/:id', function (req, res) {
 	trash.read(req.params.id)
 	.then(convertDates)
 	.then(function(odpadek){
-		res.render('odpadek/odpadek', odpadek);
+		res.render('trash/show', odpadek);
 	})
 	.catch(vyblejChybu(res));
 });
@@ -63,13 +63,13 @@ router.get('/:id', function (req, res) {
 router.get('/:id/upravit', function (req, res) {
 	trash.read(req.params.id)
 	.then(function(odpadek){
-		res.render('odpadek/odpadek-upravit', odpadek);
+		res.render('trash/form', odpadek);
 	})
 	.catch(vyblejChybu(res));
 });
 
 // update - post
-router.post('/:id/upravit', function (req, res) {
+router.post('/:id', function (req, res) {
 	var id = req.params.id;
 	var losDatos = req.body;
 	trash.update(id, losDatos)

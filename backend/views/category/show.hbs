@@ -4,7 +4,7 @@
 <p>{{content}}</p>
 <p>
 	<a href="/kategorie/{{id}}/upravit">upravit</a>
-	<form action="/kategorie/{{id}}" method="delete" enctype="application/x-www-form-urlencoded"> <input type="submit" value="Smazat" /> </form>
 	<a href="/kategorie">seznam kategorií</a>
 	<a href="/odpadky">seznam odpadku</a>
+	{{> category/delete}}
 </p>

@@ -1,0 +1,28 @@
+{{#if id}}
+<h1>Upravit odpadek</h1>
+{{else}}
+<h1>Nový odpadek</h1>
+{{/if}}
+
+{{#if id}}
+<form action="/odpadky/{{id}}" method="post" enctype="application/x-www-form-urlencoded">
+{{else}}
+<form action="/odpadky" method="post" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" value="PUT" name="_method" />
+{{/if}}
+	<p>
+		Jmeno:
+		<input name="name" value="{{name}}" />
+	</p>
+	<p>
+		Popis:
+		<textarea name="content">{{content}}</textarea>
+	</p>
+	<p>
+		<input type="submit" value="odeslat" />
+		<a href="/odpadky/{{id}}">zrušit</a> |
+		<a href="/odpadky/{{id}}/upravit">obnovit formulář</a> |
+		<a href="/odpadky">seznam odpadků</a>
+	</p>
+</form>
+{{> trash/delete}}

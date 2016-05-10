@@ -25,7 +25,7 @@ var convertDates = function (kategorie) {
 router.get('/', function(req, res) {
 	category.listAll()
 	.then(function(kategorie){
-		res.render('kategorie/list', {
+		res.render('category/list', {
 			kategorie: kategorie
 		});
 	})
@@ -36,11 +36,11 @@ router.get('/', function(req, res) {
 
 // create - put
 router.get('/nova', function (req, res) {
-	res.render('kategorie/form');
+	res.render('category/form');
 });
 
-// create - post to root
-router.post('/', function (req, res) {
+// create - put
+router.put('/', function (req, res) {
 	var losDatos = req.body;
 	category.create(losDatos)
 	.then(function(id){
@@ -54,7 +54,7 @@ router.get('/:id', function (req, res) {
 	category.read(req.params.id)
 	.then(convertDates)
 	.then(function(kategorie){
-		res.render('kategorie/show', kategorie);
+		res.render('category/show', kategorie);
 	})
 	.catch(vyblejChybu(res));
 });
@@ -63,7 +63,7 @@ router.get('/:id', function (req, res) {
 router.get('/:id/upravit', function (req, res) {
 	category.read(req.params.id)
 	.then(function(kategorie){
-		res.render('kategorie/form', kategorie);
+		res.render('category/form', kategorie);
 	})
 	.catch(vyblejChybu(res));
 });
