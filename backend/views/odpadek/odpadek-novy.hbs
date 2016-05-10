@@ -1,0 +1,15 @@
+<form action="/odpadky/novy" method="post" name="odpadek-novy" enctype="application/x-www-form-urlencoded">
+	<h1>Nový odpadek</h1>
+	<p>
+		Jméno:
+		<input name="name" value="{{name}}" />
+	</p>
+	<p>
+		Popis:
+		<textarea name="content">{{content}}</textarea>
+	</p>
+	<p>
+		<input type="submit" value="odeslat" />
+		<a href="/odpadky">seznam odpadků</a>
+	</p>
+</form>

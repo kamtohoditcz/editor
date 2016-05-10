@@ -1,4 +1,8 @@
-var controller = require('./controller');
+var trash = require('../model/trash');
+var category = require('../model/category');
+
+var express = require('express');
+var router = express.Router();
 var moment = require('moment');
 
 var vyblejChybu = function (res) {
@@ -16,19 +20,12 @@ var convertDates = function (odpadek) {
 	return odpadek;
 }
 
-module.exports = function (app, config) {
-
-// root - redirect to list
-app.get('/', function(req, res) {
-	res.redirect('/odpadky');
-});
 
 // list
-app.get('/odpadky', function(req, res) {
-	controller
-	.listAllTrash()
+router.get('/', function (req, res) {
+	trash.listAll()
 	.then(function(odpadky){
-		res.render('odpadky', {
+		res.render('odpadek/odpadky', {
 			odpadky: odpadky
 		});
 	})
@@ -38,16 +35,14 @@ app.get('/odpadky', function(req, res) {
 // TODO neexistuje nejaky framework na CRUD? to je napicu si takle psat vsechno ruco.
 
 // create - put
-app.get('/odpadky/novy', function (req, res) {
-	console.log('supame tam novy bordylek');
-	res.render('odpadek-novy');
+router.get('/novy', function (req, res) {
+	res.render('odpadek/odpadek-novy');
 });
 
 // create - post
-app.post('/odpadky/novy', function (req, res) {
+router.post('/novy', function (req, res) {
 	var losDatos = req.body;
-	controller
-	.createTrash(losDatos)
+	trash.create(losDatos)
 	.then(function(id){
 		res.redirect('/odpadky/' + id);
 	})
@@ -55,33 +50,29 @@ app.post('/odpadky/novy', function (req, res) {
 });
 
 // read
-app.get('/odpadky/:id', function (req, res) {
-	controller
-	.getTrashById(req.params.id)
+router.get('/:id', function (req, res) {
+	trash.read(req.params.id)
 	.then(convertDates)
 	.then(function(odpadek){
-		res.render('odpadek', odpadek);
+		res.render('odpadek/odpadek', odpadek);
 	})
 	.catch(vyblejChybu(res));
 });
 
 // update - get
-app.get('/odpadky/:id/upravit', function (req, res) {
-	controller
-	.getTrashById(req.params.id)
+router.get('/:id/upravit', function (req, res) {
+	trash.read(req.params.id)
 	.then(function(odpadek){
-		res.render('odpadek-upravit', odpadek);
+		res.render('odpadek/odpadek-upravit', odpadek);
 	})
 	.catch(vyblejChybu(res));
 });
 
 // update - post
-app.post('/odpadky/:id/upravit', function (req, res) {
+router.post('/:id/upravit', function (req, res) {
 	var id = req.params.id;
 	var losDatos = req.body;
-	console.log('Upravujem fella ' + id + ':', losDatos);
-	controller
-	.updateTrashById(id, losDatos)
+	trash.update(id, losDatos)
 	.then(function(odpadek){
 		res.redirect('/odpadky/' + id);
 	})
@@ -89,14 +80,12 @@ app.post('/odpadky/:id/upravit', function (req, res) {
 });
 
 // delete
-app.delete('/odpadky/:id', function (req, res) {
-	controller
-	.deleteTrashById(req.params.id)
+router.delete('/:id', function (req, res) {
+	trash.delete(req.params.id)
 	.then(function (odpadek) {
-		res.redirect('/odpadky');
+		res.redirect('/odpadky/');
 	})
 	.catch(vyblejChybu(res));
 });
 
-
-}
+module.exports = router;

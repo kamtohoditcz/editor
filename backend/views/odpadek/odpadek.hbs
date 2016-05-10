@@ -1,0 +1,8 @@
+<h1>{{name}}</h1>
+<p>vytvořen {{creation_date}} | naposledy praven {{last_edit_date}}</p>
+<p>{{content}}</p>
+<p>
+	<a href="/odpadky/{{id}}/upravit">upravit</a>
+	<form action="/odpadky/{{id}}" method="delete" name="odpadek-smazat" enctype="application/x-www-form-urlencoded"> <input type="submit" value="Smazat" /> </form>
+	<a href="/odpadky">seznam odpadku</a>
+</p>

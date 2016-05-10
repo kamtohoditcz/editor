@@ -1,27 +1,13 @@
 KamToHodit.cz BE
 ================
 
-node:
-
- * git clone
- * npm i
- * node index.js
- * localhost:3000
-
 elastic:
- * run it on localhost:9200 (default)
- * put some document into it (i use Chrome PostMan extension). I used the following document as an example: 
+ * install and configure yourself, mostly default ;)
+ * when you finish it should run on localhost:9200
 
-```
-PUSH localhost:9200/odpady/odpadek/
-
-{
-    "name": "krabice od pizzy", 
-    "aliasses": ["pizza krabice"],
-    "creation_date": "Thu Apr 28 21:28:15 CEST 2016", 
-    "last_edit_date": "Thu Apr 28 21:28:15 CEST 2016", 
-    "content": "Pokud neni vyrazne mastna, muze se hodit do papiru. Vetsinou vsak pujde do smesneho odpadu."
-}
-```
-
-;) 
+node:
+ * `git clone git@github.com:michalkral/kamtohodit.git`
+ * `npm i`
+ * `npm start`
+ * [localhost:3000](http://localhost:3000)
+ * ;) 

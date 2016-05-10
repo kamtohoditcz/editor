@@ -1,0 +1,21 @@
+<h1>Los Odpadkos</h1>
+{{! TODO bootstrap a zarovnat do krabicek ;) }}
+<ul>
+	<li>
+		<p>
+			<a href="/odpadky/novy">Vytvořit nový</a>
+		</p>
+	</li>
+{{#odpadky}}
+	<li>
+		<h3><a href='/odpadky/{{id}}'>{{name}}</a></h3>
+		{{! TODO preview helper metoda aby se zobrazovalo jen prvnich 100 znaku contentu }}
+		<p>{{content}}</p>
+		<p>
+			<form action="/odpadky/{{id}}" method="delete" name="odpadek-smazat" enctype="application/x-www-form-urlencoded"> <input type="submit" value="smazat" /> </form>
+			<a href="/odpadky/{{id}}/upravit">upravit</a>
+		</p>
+	</li>
+	<hr/>
+{{/odpadky}}
+</ul>
