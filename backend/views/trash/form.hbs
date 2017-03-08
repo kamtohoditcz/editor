@@ -5,7 +5,7 @@
 {{/if}}
 
 {{#if id}}
-<form action="/odpadky/{{id}}" method="post" enctype="application/x-www-form-urlencoded">
+<form id="edit-trash" action="/odpadky/{{id}}" method="post" enctype="application/x-www-form-urlencoded">
 {{else}}
 <form action="/odpadky" method="post" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" value="PUT" name="_method" />
@@ -27,13 +27,13 @@
 		<textarea name="content">{{content}}</textarea>
 	</p>
 	<p>
-		<input type="submit" value="odeslat" />
+		<a href="#" onclick="$('#edit-trash')">uložit</a> |
 		<a href="/odpadky/{{id}}">zrušit</a> |
 		<a href="/odpadky/{{id}}/upravit">obnovit formulář</a> |
-		<a href="/odpadky">seznam odpadků</a>
+		<a href="/odpadky">seznam odpadků</a> |
+		{{> trash/delete}}
 	</p>
 </form>
-{{> trash/delete}}
 
 <script>
 $(function() {

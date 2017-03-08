@@ -1,21 +1,28 @@
-<h1>Los Odpadkos</h1>
-{{! TODO bootstrap a zarovnat do krabicek ;) }}
-<ul>
-	<li>
-		<p>
-			<a href="/odpadky/novy">Vytvořit nový</a>
-		</p>
-	</li>
+<div style="text-align: center;">
+	<h1>Los Odpadkos</h1>
+	<p>&nbsp;</p>
+</div>
+<div class="row">
+	<div class="card col-xs-12 col-md-3 text-center" style="padding: 0;">
+		<a href="/odpadky/novy" class="btn btn-primary" style="width: 100%; height: 100%;">
+			<i class="fa fa-plus-circle fa-5x" aria-hidden="true" style="vertical-align: center;"></i><br/>
+			Vytvořit<br/>
+			nový<br/>
+			odpadek
+		</a>
+	</div>
 {{#odpadky}}
-	<li>
-		<h3><a href='/odpadky/{{id}}'>{{name}}</a></h3>
-		{{! TODO preview helper metoda aby se zobrazovalo jen prvnich 100 znaku contentu }}
-		<p>{{content}}</p>
-		<p>
-			<a href="/odpadky/{{id}}/upravit">upravit</a>
-			{{> trash/delete}}
-		</p>
-	</li>
-	<hr/>
+	<div class="card col-xs-12 col-md-3">
+	  {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
+	  <div class="card-block">
+	    <h4 class="card-title"><a href='/odpadky/{{id}}'>{{name}}</a></h4>
+	    <p class="card-text">{{content}}</p>
+
+		  <div class="card-block">
+				<a href="/odpadky/{{id}}/upravit">upravit</a> | {{> trash/delete}}
+			</div>
+
+	  </div>
+	</div>
 {{/odpadky}}
-</ul>
+</div>

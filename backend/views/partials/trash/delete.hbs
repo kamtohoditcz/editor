@@ -1,4 +1,5 @@
-<form action="/odpadky/{{id}}" method="POST" enctype="application/x-www-form-urlencoded">
+<form id="delete-trash-by-id-{{id}}" action="/odpadky/{{id}}" method="POST" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" value="DELETE" name="_method" />
-	<input type="submit" value="Smazat" />
+	{{!-- <input type="submit" value="Smazat" class="btn btn-secondary" /> --}}
+	<a href="#" onclick="$('#delete-trash-by-id-{{id}}').submit()">smazat</a>
 </form>
