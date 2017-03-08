@@ -15,6 +15,14 @@
 		<input name="name" value="{{name}}" />
 	</p>
 	<p>
+		Aliasy:
+		<input name="aliases" value="{{aliases}}" />
+	</p>
+	<p>
+		Kategorie:
+		<input name="category" value="{{category}}" />
+	</p>
+	<p>
 		Popis:
 		<textarea name="content">{{content}}</textarea>
 	</p>
@@ -26,3 +34,42 @@
 	</p>
 </form>
 {{> trash/delete}}
+
+<script>
+$(function() {
+	$('[name=aliases]').selectize({delimiter: ','});
+	$('[name=category]').selectize({
+		valueField: 'url',
+		labelField: 'name',
+		searchField: 'name',
+		create: false,
+		render: {
+				option: function(item, escape) {
+						return '<div>' +
+							'<span class="title"><span class="name">' + escape(item.name) + '</span></span>' +
+							'<span class="description">' + escape(item.description) + '</span>' +
+						'</div>';
+				}
+		},
+		score: function(search) {
+				// var score = this.getScoreFunction(search);
+				return function(item) {
+						return item.score;
+						// return score(item) * (1 + Math.min(item.watchers / 100, 1));
+				};
+		},
+		load: function(query, callback) {
+				if (!query.length) return callback();
+				$.ajax({
+						url: '/category/search/' + encodeURIComponent(query),
+						type: 'GET',
+						error: function() {
+								callback();
+						},
+						success: function(res) {
+								callback(res.repositories.slice(0, 10));
+						}
+				});
+		}
+	});
+</script>

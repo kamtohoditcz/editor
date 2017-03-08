@@ -14,9 +14,11 @@ var vyblejChybu = function (res) {
 	}
 }
 
+var DATE_FORMAT = "ddd MMM D H:mm:ss CEST YYYY";
+
 var convertDates = function (odpadek) {
-	odpadek.creation_date = moment(odpadek.creation_date).locale('cs').calendar();
-	odpadek.last_edit_date = moment(odpadek.last_edit_date).locale('cs').fromNow();
+	odpadek.creation_date = moment(odpadek.creation_date, DATE_FORMAT).locale('cs').calendar();
+	odpadek.last_edit_date = moment(odpadek.last_edit_date, DATE_FORMAT).locale('cs').fromNow();
 	return odpadek;
 }
 
