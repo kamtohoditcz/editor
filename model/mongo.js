@@ -41,7 +41,12 @@ module.exports = mongo = {
 
   find: (collectionName, findOptions) => {
     return performOperation(collectionName, (collection) => {
-      return collection.find(findOptions);
+
+      // http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#find
+      var cursor = collection.find(findOptions);
+
+      var documentsArrayPromise = cursor.toArray();
+      return documentsArrayPromise;
     });
   },
 
