@@ -1,4 +1,5 @@
-<form action="/kategorie/{{id}}" method="POST" enctype="application/x-www-form-urlencoded">
+<form id="delete-category-by-id-{{id}}" action="/kategorie/{{id}}" method="POST" enctype="application/x-www-form-urlencoded" style="display: inline-block;">
 	<input type="hidden" value="DELETE" name="_method" />
-	<input type="submit" value="Smazat" />
+	{{!-- <input type="submit" value="Smazat" /> --}}
+	<a href="#" onclick="$('#delete-category-by-id-{{id}}').submit()">smazat</a>
 </form>
