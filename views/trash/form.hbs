@@ -1,13 +1,13 @@
-{{#if id}}
+{{#if _id}}
 <h1>Upravit odpadek</h1>
 {{else}}
 <h1>Nový odpadek</h1>
 {{/if}}
 
-{{#if id}}
-<form id="edit-trash" action="/odpadky/{{id}}" method="post" enctype="application/x-www-form-urlencoded">
+{{#if _id}}
+<form id="edit-trash" action="/odpadky/{{_id}}" method="post" enctype="application/x-www-form-urlencoded">
 {{else}}
-<form action="/odpadky" method="post" enctype="application/x-www-form-urlencoded">
+<form id="edit-trash" action="/odpadky" method="post" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" value="PUT" name="_method" />
 {{/if}}
 	<p>
@@ -27,49 +27,10 @@
 		<textarea name="content">{{content}}</textarea>
 	</p>
 	<p>
-		<a href="#" onclick="$('#edit-trash')">uložit</a> |
-		<a href="/odpadky/{{id}}">zrušit</a> |
-		<a href="/odpadky/{{id}}/upravit">obnovit formulář</a> |
+		<a href="#" onclick="$('#edit-trash').submit()">uložit</a> |
+		<a href="/odpadky/{{_id}}">zrušit</a> |
+		<a href="/odpadky/{{_id}}/upravit">obnovit formulář</a> |
 		<a href="/odpadky">seznam odpadků</a> |
 		{{> trash/delete}}
 	</p>
 </form>
-
-<script>
-$(function() {
-	$('[name=aliases]').selectize({delimiter: ','});
-	$('[name=category]').selectize({
-		valueField: 'url',
-		labelField: 'name',
-		searchField: 'name',
-		create: false,
-		render: {
-				option: function(item, escape) {
-						return '<div>' +
-							'<span class="title"><span class="name">' + escape(item.name) + '</span></span>' +
-							'<span class="description">' + escape(item.description) + '</span>' +
-						'</div>';
-				}
-		},
-		score: function(search) {
-				// var score = this.getScoreFunction(search);
-				return function(item) {
-						return item.score;
-						// return score(item) * (1 + Math.min(item.watchers / 100, 1));
-				};
-		},
-		load: function(query, callback) {
-				if (!query.length) return callback();
-				$.ajax({
-						url: '/category/search/' + encodeURIComponent(query),
-						type: 'GET',
-						error: function() {
-								callback();
-						},
-						success: function(res) {
-								callback(res.repositories.slice(0, 10));
-						}
-				});
-		}
-	});
-</script>

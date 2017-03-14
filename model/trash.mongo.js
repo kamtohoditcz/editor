@@ -16,14 +16,14 @@ module.exports = {
     return mongo.create(collectionName, losDatos)
       .then((result) => {
         console.log(`MONGO: Created: ` + JSON.stringify(result, null, 2))
-        return result;
+        return result.ops[0]._id;
       });
   },
 
   read: function (id) {
     return mongo.get(collectionName, id)
       .then((result) => {
-        console.log(`MONGO: Got [${id}]: ` + JSON.stringify(result, null, 2));
+        console.log(`MONGO: Got for id "${id}": ` + JSON.stringify(result, null, 2));
         return result;
       });
   },
