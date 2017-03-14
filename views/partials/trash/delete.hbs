@@ -1,5 +1,5 @@
-<form id="delete-trash-by-id-{{id}}" action="/odpadky/{{id}}" method="POST" enctype="application/x-www-form-urlencoded" style="display: inline-block;">
+<form id="delete-trash-by-id-{{_id}}" action="/odpadky/{{_id}}" method="POST" enctype="application/x-www-form-urlencoded" style="display: inline-block;">
 	<input type="hidden" value="DELETE" name="_method" />
 	{{!-- <input type="submit" value="Smazat" class="btn btn-secondary" /> --}}
-	<a href="#" onclick="$('#delete-trash-by-id-{{id}}').submit()">smazat</a>
+	<a href="#" onclick="$('#delete-trash-by-id-{{_id}}').submit()">smazat</a>
 </form>

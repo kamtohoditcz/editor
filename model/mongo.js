@@ -1,9 +1,13 @@
+var mongodb = require('mongodb');
+
 // Use mongo-mock if you don't want to install mongo ;)
 // See: https://github.com/williamkapke/mongo-mock
-//var mongodb = require('mongo-mock');
-//mongodb.max_delay = 0;
+if (process.env.MONGOMOCK) {
+  var mongodb = require('mongo-mock');
+  mongodb.max_delay = 0;
+  console.log('Using mongo-mock instead of native mongo driver!')
+}
 
-var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 var ObjectID = mongodb.ObjectID;
 

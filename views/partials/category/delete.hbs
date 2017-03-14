@@ -1,5 +1,5 @@
-<form id="delete-category-by-id-{{id}}" action="/kategorie/{{id}}" method="POST" enctype="application/x-www-form-urlencoded" style="display: inline-block;">
+<form id="delete-category-by-id-{{_id}}" action="/kategorie/{{_id}}" method="POST" enctype="application/x-www-form-urlencoded" style="display: inline-block;">
 	<input type="hidden" value="DELETE" name="_method" />
 	{{!-- <input type="submit" value="Smazat" /> --}}
-	<a href="#" onclick="$('#delete-category-by-id-{{id}}').submit()">smazat</a>
+	<a href="#" onclick="$('#delete-category-by-id-{{_id}}').submit()">smazat</a>
 </form>

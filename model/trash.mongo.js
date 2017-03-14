@@ -7,7 +7,7 @@ var collectionName = 'trash';
 
 module.exports = {
   listAll: function () {
-    console.log('trash.mongo: calling mongo.listAll');
+    console.log('MONGO: Calling mongo.listAll');
     return mongo.listAll(collectionName);
   },
 
