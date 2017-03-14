@@ -58,7 +58,7 @@ module.exports = mymongo = {
     return performOperation(collectionName, (collection) => {
 
       // See: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#updateOne
-      return collection.updateOne({ _id: new ObjectID(documentId) }, { $set: { value: documentValue } });
+      return collection.updateOne({ _id: new ObjectID(documentId) }, { $set: documentValue });
 
     });
   },

@@ -46,7 +46,7 @@ router.put('/', function (req, res) {
   var losDatos = req.body;
   trash.create(losDatos)
     .then(function (id) {
-      res.redirect('/odpadky/' + id);
+      res.redirect(`/odpadky/${id}`);
     })
     .catch(vyblejChybu(res));
 });
@@ -76,7 +76,7 @@ router.post('/:id', function (req, res) {
   var losDatos = req.body;
   trash.update(id, losDatos)
     .then(function (odpadek) {
-      res.redirect('/odpadky/' + id);
+      res.redirect(`/odpadky/${id}`);
     })
     .catch(vyblejChybu(res));
 });
@@ -85,7 +85,7 @@ router.post('/:id', function (req, res) {
 router.delete('/:id', function (req, res) {
   trash.delete(req.params.id)
     .then(function (odpadek) {
-      res.redirect('/odpadky/');
+      res.redirect('/odpadky');
     })
     .catch(vyblejChybu(res));
 });
