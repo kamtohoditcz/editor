@@ -7,28 +7,26 @@ var moment = require('moment');
 
 var vyblejChybu = function (res) {
   return function (err) {
-    res
-      .status(500)
+    // TODO adjust this for production
+    res.status(500)
       .write(err)
       .end();
   }
 }
 
-//var DATE_FORMAT = "ddd MMM D H:mm:ss CEST YYYY";
-
+// TODO do this automatically using pipes in views
 var convertDates = function (odpadek) {
-  console.log("CONVERTING DATES ON", odpadek);
   odpadek.creation_date = moment(odpadek.creation_date).locale('cs').calendar();
   odpadek.last_edit_date = moment(odpadek.last_edit_date).locale('cs').fromNow();
   return odpadek;
 }
 
+// -----------------------------------------------------------------------------
 
 // list
 router.get('/', function (req, res) {
   trash.listAll()
     .then(function (odpadky) {
-      console.log('RENDERING ROUTE trash list with data: ' + JSON.stringify(odpadky, null, 2));
       res.render('trash/list', {
         odpadky: odpadky
       });
