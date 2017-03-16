@@ -1,9 +1,10 @@
 <div style="text-align: center;">
-	<h1>Los Odpadkos</h1>
+	<h1>Los Odpadkos{{#if q}}: {{q}}{{/if}}</h1>
 	<p>&nbsp;</p>
+	{{> trash/search}}
 </div>
 <div class="row">
-	<div class="card col-xs-12 col-md-3 text-center" style="padding: 0;">
+	<div class="card col-xs-12 col-md-4 text-center" style="padding: 0;">
 		<a href="/odpadky/novy" class="btn btn-primary" style="width: 100%; height: 100%;">
 			<i class="fa fa-plus-circle fa-5x" aria-hidden="true" style="vertical-align: center;"></i><br/>
 			vytvořit<br/>
@@ -12,7 +13,7 @@
 		</a>
 	</div>
 {{#odpadky}}
-	<div class="card col-xs-12 col-md-3">
+	<div class="card col-xs-12 col-md-4">
 	  {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
 	  <div class="card-block">
 	    <h4 class="card-title"><a href='/odpadky/{{_id}}'>{{name}}</a></h4>

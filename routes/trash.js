@@ -25,13 +25,20 @@ var convertDates = function (odpadek) {
 
 // list
 router.get('/', function (req, res) {
-  trash.listAll()
-    .then(function (odpadky) {
+  var q = req.query.q;
+  var t = req.query.t;
+  trash.listAll(q).then(function (odpadky) {
+    // console.log(`Accept: ${req.get('Accept')}`);
+    if (t === 'json') {
+      // console.log('returning json', odpadky);
+      res.json(odpadky);
+    } else {
+      // console.log('rendering trash/list', odpadky);
       res.render('trash/list', {
         odpadky: odpadky
       });
-    })
-    .catch(vyblejChybu(res));
+    }
+  }).catch(vyblejChybu(res));
 });
 
 // TODO neexistuje nejaky framework na CRUD? to je napicu si takle psat vsechno ruco.
@@ -54,9 +61,13 @@ router.put('/', function (req, res) {
 // read
 router.get('/:id', function (req, res) {
   trash.read(req.params.id)
-    .then(convertDates)
-    .then(function (odpadek) {
-      res.render('trash/show', odpadek);
+    .then((odpadek) => {
+      if (!odpadek) {
+        // TODO show some "do you want to create message?"
+        res.redirect('/odpadky');
+      } else {
+        res.render('trash/show', convertDates(odpadek));
+      }
     })
     .catch(vyblejChybu(res));
 });

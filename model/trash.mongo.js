@@ -6,9 +6,13 @@ var mongo = require('./mongo');
 var collectionName = 'trash';
 
 module.exports = {
-  listAll: function () {
+  listAll: function (text) {
     console.log('MONGO: Calling mongo.listAll');
-    return mongo.listAll(collectionName);
+    if (text) {
+      return mongo.findText(collectionName, text);
+    } else {
+      return mongo.listAll(collectionName);
+    }
   },
 
   create: function (losDatos) {
