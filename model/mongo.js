@@ -37,21 +37,7 @@ var performOperation = (collectionName, operationFunction) => {
   return operationPromise;
 }
 
-var buildQuery = function (queryString) {
-  // For indexed version this works, but it doesn't
-  // support substring match.
-  // return {
-  //   query: { $text: { $search: queryString } },
-  //   options: { score: { $meta: "textScore" } },
-  //   sort: { score: { $meta: "textScore" } },
-  // };
-  var qs = queryString.replace(/\s+/g, ' ').replace(' ', '.* .*');
-  var re = { $regex: qs, $options: 'gim' };
-  return {
-    $or: [{ name: re }, { aliases: re }],
-  }
-}
-
+var buildQuery = require('./search-query-builder');
 
 // -----------------------------------------------------------------------------
 
@@ -130,7 +116,6 @@ module.exports = mymongo = {
 
   findText: (collectionName, text) => {
     var query = buildQuery(text);
-    console.log('will search for query: ', query);
     return mymongo.find(collectionName, { query: query });
   },
 
