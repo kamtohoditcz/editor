@@ -8,7 +8,7 @@
 
 var sameChars = ['aá', 'cč', 'dď', 'eéě', 'ií', 'nň', 'oó', 'rř', 'sš', 'tť', 'uúů', 'yý', 'zž'];
 
-module.exports = searchQueryBuilder(text) => {
+module.exports = (text) => {
   text = text.trim();
   text = text.replace(/\s+/g, ' ');
   text = text.replace(' ', '.* ');
