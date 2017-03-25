@@ -34,4 +34,4 @@ npm-debug.log
 
 ########
 Makefile
-
+.node-version
