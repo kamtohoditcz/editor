@@ -32,6 +32,22 @@ npm-debug.log
 # Ignore local environment files
 .env
 
+# yo rest - generated
+.DS_Store
+node_modules
+public
+.tmp
+.idea
+.log
+dist
+docs
+.env
+npm-debug.log
+.nyc_output
+coverage
+cassettes
+
 ########
 Makefile
 .node-version
+A
