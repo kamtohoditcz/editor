@@ -1,29 +1,29 @@
 <div style="text-align: center;">
-	<h1>Los Odpadkos{{#if q}}: {{q}}{{/if}}</h1>
+	<h1>Los Známkos{{#if q}}: {{q}}{{/if}}</h1>
 	<p>&nbsp;</p>
-	{{> trash/search}}
+	{{> badge/search}}
 </div>
 <div class="row">
 	<div class="card col-xs-12 col-md-4 text-center" style="padding: 0;">
-		<a href="/odpadky/novy" class="btn btn-primary" style="width: 100%; height: 100%;">
+		<a href="/znamky/nova" class="btn btn-primary" style="width: 100%; height: 100%;">
 			<i class="fa fa-plus-circle fa-5x" aria-hidden="true" style="vertical-align: center;"></i><br/>
 			vytvořit<br/>
-			nový<br/>
-			odpadek
+			novou<br/>
+      známku
 		</a>
 	</div>
-{{#odpadky}}
+{{#badges}}
 	<div class="card col-xs-12 col-md-4">
-	  {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
+    <img class="card-img-top" src="{{image.url}}" />
 	  <div class="card-block text-center">
-	    <h4 class="card-title"><a href='/odpadky/{{_id}}'>{{name}}</a></h4>
+	    <h4 class="card-title"><a href='/znamky/{{_id}}'>{{name}}</a></h4>
 	    <p class="card-text">{{description}}</p>
 
 		  <div class="card-block">
-				<a href="/odpadky/{{_id}}/upravit">upravit</a> | {{> trash/delete}}
+				<a href="/znamky/{{_id}}/upravit">upravit</a> | {{> badge/delete}}
 			</div>
 
 	  </div>
 	</div>
-{{/odpadky}}
+{{/badges}}
 </div>

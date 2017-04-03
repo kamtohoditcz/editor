@@ -11,6 +11,7 @@ var hbs = require('hbs');
 
 var routesIndex = require('./routes/index');
 var routesTrash = require('./routes/trash');
+var routesBadge = require('./routes/badge');
 //var routesCategory = require('./routes/category');
 
 var app = express();
@@ -44,6 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routesIndex);
 app.use('/odpadky', routesTrash);
+app.use('/znamky', routesBadge);
 //app.use('/kategorie', routesCategory);
 
 // catch 404 and forward to error handler

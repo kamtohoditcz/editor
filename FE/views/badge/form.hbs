@@ -1,0 +1,54 @@
+{{#if _id}}
+<h1>Upraujeme "{{name}}"</h1>
+{{else}}
+<h1>Nový odpadek</h1>
+{{/if}}
+
+{{#if _id}}
+<form action="/znamky/{{_id}}" method="post" enctype="application/x-www-form-urlencoded">
+{{else}}
+<form action="/znamky" method="post" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" value="PUT" name="_method" />
+{{/if}}
+  <div class="form-group">
+		<label for="name"> JMÉNO: </label>
+		<input type="input" id="name" name="name" class="form-control" placeholder="například: krabice od pizzy" value="{{name}}" />
+    {{!-- <small id="nameHelp" class="form-text text-muted">co nejvýstižnějsí jméno pro odpadek</small> --}}
+	</div>
+  <div class="form-group">
+		<label for="description"> POPIS: </label>
+		<textarea id="description" name="description" class="form-control">{{description}}</textarea>
+    {{!-- <small id="noteHelp" class="form-text text-muted">dodatečný popis, prvních 160 znaků bude
+			 zobrazeno pod vyhledáváním, zbytek až u samotného odpadku</small> --}}
+	</div>
+  <div class="form-group">
+		<label for="note"> POZNÁMKA: </label>
+		<textarea id="note" name="note" class="form-control">{{note}}</textarea>
+    {{!-- <small id="noteHelp" class="form-text text-muted">pouze pro výzkum, nebude zobrazena na webu</small> --}}
+	</div>
+	<div>
+		<a href="#" onclick="$(this).closest('form').submit()"> uložit změny </a>
+		| <a href="/znamky/{{_id}}"> zrušit úpravy </a>
+		| <a href="/znamky/{{_id}}/upravit"> obnovit formulář </a>
+		| <a href="/znamky"> seznam odpadků </a>
+		{{#if _id}}| {{> badge/delete}}{{/if}}
+	</div><div class="form-group">
+		<label for="description"> POPIS: </label>
+		<textarea id="description" name="description" class="form-control">{{description}}</textarea>
+    {{!-- <small id="noteHelp" class="form-text text-muted">dodatečný popis, prvních 160 znaků bude
+			 zobrazeno pod vyhledáváním, zbytek až u samotného odpadku</small> --}}
+	</div>
+  <div class="form-group">
+		<label for="note"> POZNÁMKA: </label>
+		<textarea id="note" name="note" class="form-control">{{note}}</textarea>
+    {{!-- <small id="noteHelp" class="form-text text-muted">pouze pro výzkum, nebude zobrazena na webu</small> --}}
+	</div>
+	<div>
+		<a href="#" onclick="$(this).closest('form').submit()"> uložit změny </a>
+		| <a href="/znamky/{{_id}}"> zrušit úpravy </a>
+		| <a href="/znamky/{{_id}}/upravit"> obnovit formulář </a>
+		| <a href="/znamky"> seznam odpadků </a>
+		{{#if _id}}| {{> badge/delete}}{{/if}}
+	</div>
+
+</form>

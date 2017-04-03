@@ -1,8 +1,11 @@
 {{#if _id}}
 <h1><span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span>{{name}}</h1>
 
+{{#if image}}
+  <img src="image.url" />
+{{/if}}
+
 <p>
-{{#if aliases}} Nebo také: {{aliases}} | {{/if}}
 vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{{/if}}
 | naposledy upraven {{last_edit_date}} {{#if last_edit_user}} uživatelem {{last_edit_user}} {{/if}}
 </p>
@@ -22,11 +25,11 @@ vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{
 {{/if}}
 
 <p>
-	<a href="/odpadky/{{_id}}/upravit">upravit</a> |
-	<a href="/odpadky">seznam odpadků</a> |
-	{{> trash/delete}}
+	<a href="/znamky/{{_id}}/upravit">upravit</a> |
+	<a href="/znamky">seznam známek</a> |
+	{{> badge/delete}}
 </p>
 
 {{else}}
-Tento odpadek neexistuje.
+Tato znamka neexistuje.
 {{/if}}

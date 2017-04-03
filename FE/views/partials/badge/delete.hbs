@@ -1,0 +1,3 @@
+{{#if _id}}
+<a href="#" onclick="$.ajax({ url: '/znamky/{{_id}}', type: 'POST', data: {_method: 'DELETE'}, success: function() { window.location.replace('/znamky'); }})">smazat</a>
+{{/if}}
