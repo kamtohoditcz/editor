@@ -1,0 +1,46 @@
+{
+  "name": "kamtohodit.cz",
+  "version": "0.0.1",
+  "description": "Backend webu kamtohodit.cz",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "DEBUG='kamtohodit:*' node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/michalkral/kamtohodit.git"
+  },
+  "keywords": [
+    "trash",
+    "recycling"
+  ],
+  "author": "Jakub kub1x Podlaha, Michal Kral",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michalkral/kamtohodit/issues"
+  },
+  "homepage": "https://github.com/michalkral/kamtohodit#readme",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
+    "debug": "^2.2.0",
+    "dotenv": "^4.0.0",
+    "elasticsearch": "^11.0.1",
+    "express": "^4.13.4",
+    "hbs": "^4.0.0",
+    "lodash": "^4.11.1",
+    "method-override": "^2.3.5",
+    "moment": "^2.13.0",
+    "mongodb": "^2.2.24",
+    "morgan": "^1.7.0",
+    "multer": "^1.3.0",
+    "mustache": "^2.2.1",
+    "mustache-express": "^1.2.2",
+    "node-sass-middleware": "^0.9.8",
+    "serve-favicon": "^2.3.0"
+  },
+  "devDependencies": {
+    "mongo-mock": "^2.1.4"
+  }
+}
