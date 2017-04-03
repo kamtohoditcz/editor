@@ -1,5 +1,5 @@
 var trash = require('../model/trash');
-var category = require('../model/category');
+//var category = require('../model/category');
 
 var express = require('express');
 var router = express.Router();
