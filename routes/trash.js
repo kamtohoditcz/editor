@@ -5,6 +5,9 @@ var express = require('express');
 var router = express.Router();
 var moment = require('moment');
 
+var multer  = require('multer')
+var upload = multer({ dest: 'public/uploads/trash' }).single('image');
+
 var vyblejChybu = function (res) {
   return function (err) {
     // TODO adjust this for production
@@ -40,12 +43,9 @@ router.get('/', function (req, res) {
   var q = req.query.q;
   var t = req.query.t;
   trash.listAll(q).then(function (odpadky) {
-    // console.log(`Accept: ${req.get('Accept')}`);
     if (t === 'json') {
-      // console.log('returning json', odpadky);
       res.json(odpadky);
     } else {
-      // console.log('rendering trash/list', odpadky);
       res.render('trash/list', {
         odpadky: odpadky
       });
@@ -104,6 +104,22 @@ router.post('/:id', function (req, res) {
     .catch(vyblejChybu(res));
 });
 
+// upload image - post
+router.post('/:id/nahrat-obrazek', upload, function (req, res) {
+  var id = req.params.id;
+  if (req.file) {
+    console.log('GOT FILEEEEEE: ', {path} = req.file);
+    losDatos.image = {
+      url: req.file.path
+    }
+  }
+  trash.update(id, losDatos)
+    .then(function (odpadek) {
+      res.redirect(`/odpadky/${id}`);
+    })
+    .catch(vyblejChybu(res));
+});
+
 // delete
 router.delete('/:id', function (req, res) {
   trash.delete(req.params.id)
@@ -112,5 +128,6 @@ router.delete('/:id', function (req, res) {
     })
     .catch(vyblejChybu(res));
 });
+
 
 module.exports = router;

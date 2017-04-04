@@ -1,0 +1,144 @@
+
+
+<div id="image-uploader" style="widht: 100%;">
+  <input id="fileupload" type="file" name="image" data-url="/test/upload" style="display: none;">
+  <!-- <img class="droplaceholder" src="http://placehold.it/500x500" style="width: 100%;"> -->
+  <!-- now created using https://dummyimage.com/800x600/292929/e3e3e3&text=click%20or%20drop -->
+  <img id="dropzone" class="fade well" src="/img/clickordrop.png" style="width: 100%;">
+  <div id="progress" style="margin-top: -1px; width: 100%; background: #55a; display: none;">
+      <div class="bar" style="width: 0%; height: 1px; background: #aaf;"></div>
+  </div>
+</div>
+
+<script src="/js/vendor/jquery.ui.widget.js"></script>
+<script src="/js/jquery.iframe-transport.js"></script>
+<script src="/js/load-image.all.min.js"></script>
+<script src="/js/canvas-to-blob.min.js"></script>
+<script src="/js/jquery.fileupload.js"></script>
+<script src="/js/jquery.fileupload-process.js"></script>
+<script src="/js/jquery.fileupload-image.js"></script>
+<style>
+#dropzone {
+  opacity: 1;
+  border: 5px solid #292929;
+}
+#dropzone.fade:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+#dropzone.fade.in {
+    border: 5px dashed #292929;
+}
+#dropzone.fade.in.hover {
+    opacity: 0.7;
+}
+#dropzone.fade {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}
+</style>
+
+<script>
+$(function () {
+  // Prevent default drop actions
+  $(document).bind('drop dragover', function (e) {
+    // Just in case
+    var $dropzone = $('#dropzone');
+    $dropzone.removeClass('in hover');
+    // Prevent it all
+    e.preventDefault();
+  });
+
+  $(document).bind('dragleave', function (e) {
+    var $dropzone = $('#dropzone');
+    $dropzone.removeClass('in hover');
+  });
+
+
+  // Propagate click to the upload element
+  $('#dropzone').click(function(e){ $('#fileupload').click(); });
+
+  // Handle the dragover event
+  $(document).bind('dragover', function (e) {
+    var $dropzone = $('#dropzone');
+    $dropzone.addClass('in');
+    var found = false,
+        node = e.target;
+    do {
+        if (node === $dropzone[0]) {
+            found = true;
+            break;
+        }
+        node = node.parentNode;
+    } while (node != null);
+    if (found) {
+        $dropzone.addClass('hover');
+    } else {
+        $dropzone.removeClass('hover');
+    }
+  });
+
+  // Handle the file upload
+  $('#fileupload').fileupload({
+    // Basic thingy
+    dataType: 'json',
+
+    // Enable dropzone
+    dropZone: $('#dropzone'),
+
+    // Allow only jp(e)g or png files
+    acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
+
+    // Enable image resizing, except for Android and Opera,
+    // which actually support image resizing, but fail to
+    // send Blob objects via XHR requests:
+    disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
+    imageMaxWidth: 800,
+    imageMaxHeight: 800,
+    imageCrop: true, // Force cropped images
+
+    // Callbacks
+    add: function (e, data) {
+      $('#progress .bar').css('width', '0%');
+      $('#progress').show();
+      data.submit();
+    },
+
+    progressall: function (e, data) {
+      var progress = parseInt(data.loaded / data.total * 100, 10);
+      $('#progress .bar').css('width', progress + '%');
+    },
+
+    done: function (e, data) {
+      console.log('got result', data);
+      $('#progress').hide();
+      var $alert;
+      if (data.result.error) {
+        $alert = $('<div class="alert alert-danger" role="alert">'+data.result.error+'</div>').prependTo('#image-uploader');
+        setTimeout(function(){
+          $alert.hide('slow').remove();
+        }, 3000);
+      } else {
+        //$alert = $('<div class="alert alert-success" role="alert"> Obrázek nahrán ;-) </div>').prependTo('#image-uploader');
+        //setTimeout(function(){
+        //  $alert.hide('slow').remove();
+        //}, 3000);
+        $('#dropzone').attr('src', data.result.path);
+      }
+    },
+
+    fail: function (e, data) {
+      var $alert = $('<div class="alert alert-danger" role="alert"> Něco se ošklivým způsobem nepovedlo. </div>').prependTo('#image-uploader');
+      setTimeout(function(){
+        $alert.hide('slow').remove();
+      }, 3000);
+    },
+
+  });
+});
+</script>
+

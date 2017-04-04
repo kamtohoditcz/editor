@@ -15,6 +15,10 @@ vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{
 | naposledy upraven {{last_edit_date}} {{#if last_edit_user}} uživatelem {{last_edit_user}} {{/if}}
 </p>
 
+{{#if image}}
+  <img src="{{image.url}}" />
+{{/if}}
+
 {{#if description}}
 <h2> POPIS </h2>
 <p>{{description}}</p>
