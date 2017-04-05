@@ -33,16 +33,15 @@ router.post('/test/upload', upload, function(req, res, next) {
     // resize and remove EXIF profile data
     let oldPath = req.file.path;
     let newPath = req.file.path + '.' + req.file.mimetype.replace('image/', '');
-    gm(oldPath)
-    .resize(800, 800)
-    .noProfile()
-    .write(newPath, function (err) {
-      if (!err) console.log('done');
-      else console.log(err);
-
-      res.json({path: newPath.replace('public', '')});
-
-    });
+    //gm(oldPath)
+    //.resize(800, 800)
+    //.noProfile()
+    //.write(newPath, function (err) {
+    //  if (!err) console.log('done');
+    //  else console.log(err);
+    //  res.json({path: newPath.replace('public', '')});
+    //});
+    res.json({path: oldPath.replace('public', '')});
   }
 });
 
