@@ -1,29 +1,37 @@
 <div style="text-align: center;">
-	<h1>Los Odpadkos{{#if q}}: {{q}}{{/if}}</h1>
-	<p>&nbsp;</p>
-	{{> trash/search}}
+  <h1>Los Odpadkos{{#if q}}: {{q}}{{/if}}</h1>
+  <p>&nbsp;</p>
+  {{> trash/search}}
 </div>
 <div class="row">
-	<div class="card col-xs-12 col-md-4 text-center" style="padding: 0;">
-		<a href="/odpadky/novy" class="btn btn-primary" style="width: 100%; height: 100%;">
-			<i class="fa fa-plus-circle fa-5x" aria-hidden="true" style="vertical-align: center;"></i><br/>
-			vytvořit<br/>
-			nový<br/>
-			odpadek
-		</a>
-	</div>
+  <div class="card col-xs-12 col-md-4 text-center" style="padding: 0;">
+    <a href="/odpadky/novy" class="btn btn-primary" style="width: 100%; height: 100%;">
+      <i class="fa fa-plus-circle fa-5x" aria-hidden="true" style="vertical-align: center;"></i><br/>
+      vytvořit<br/>
+      nový<br/>
+      odpadek
+    </a>
+  </div>
 {{#odpadky}}
-	<div class="card col-xs-12 col-md-4">
-	  {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
-	  <div class="card-block text-center">
-	    <h4 class="card-title"><a href='/odpadky/{{_id}}'>{{name}}</a></h4>
-	    <p class="card-text">{{description}}</p>
+  <div class="card col-xs-12 col-md-4">
+    {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
+    <div class="card-block text-center">
+      <h4 class="card-title">
+        <span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span>
+        <a href='/odpadky/{{_id}}'>{{name}}</a>
+        {{#equals status 'PUBLIC'}}
+          <i class="fa fa-check" aria-hidden="true" style="color: #3BB053;"></i>
+        {{else}}
+          <i class="fa fa-pencil-square-o" aria-hidden="true" style="color: grey;"></i>
+        {{/equals}}
+      </h4>
+      <p class="card-text">{{description}}</p>
 
-		  <div class="card-block">
-				<a href="/odpadky/{{_id}}/upravit">upravit</a> | {{> trash/delete}}
-			</div>
+      <div class="card-block">
+        <a href="/odpadky/{{_id}}/upravit">upravit</a> | {{> trash/delete}}
+      </div>
 
-	  </div>
-	</div>
+    </div>
+  </div>
 {{/odpadky}}
 </div>

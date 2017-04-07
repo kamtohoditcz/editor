@@ -17,6 +17,17 @@ var routesBadge = require('./routes/badge');
 var app = express();
 
 // view engine setup
+// TODO this shall probly go to separate file
+hbs.registerHelper("equals", function(a, b, options) {
+  console.log('testing equals', {a, b, options});
+  if (a === b) {
+    return options.fn(this);
+  }
+  else {
+    return options.inverse(this);
+  }
+});
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
