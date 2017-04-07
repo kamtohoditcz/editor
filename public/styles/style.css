@@ -5,4 +5,8 @@ body {
 a {
   color: #00B7FF; }
 
+* {
+  border-radius: 0 !important;
+}
+
 /*# sourceMappingURL=style.css.map */
