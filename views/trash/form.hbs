@@ -1,3 +1,19 @@
+<script>
+$(function() {
+
+  var categoryXhr;
+  $('#category').autoComplete({
+      minChars: 0,
+      delay: 300,
+      source: function(term, response){
+        try { categoryXhr.abort(); } catch(e){}
+        categoryXhr = $.getJSON('/odpadky/kategorie', { q: term }, function(data){ response(data); });
+      }
+  });
+
+});
+</script>
+
 {{#if _id}}
 <h1>Upraujeme "{{name}}"</h1>
 {{else}}

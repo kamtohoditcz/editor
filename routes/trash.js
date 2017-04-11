@@ -23,6 +23,18 @@ var convertDates = function (odpadek) {
 
 // -----------------------------------------------------------------------------
 
+// list categories
+router.get('/kategorie', function (req, res) {
+  var q = req.query.q;
+  var t = req.query.t;
+  trash.listCategories(q).then(function (kategorie) {
+    //if (t === 'json') {
+      console.log('returning json', kategorie);
+      res.json(kategorie);
+    //}
+  }).catch(vyblejChybu(res));
+});
+
 // list
 router.get('/', function (req, res) {
   var q = req.query.q;

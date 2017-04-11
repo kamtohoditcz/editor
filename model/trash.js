@@ -48,4 +48,19 @@ module.exports = {
         return result;
       });
   },
+
+  listCategories: function (prefix) {
+    let findOptions = {
+      query: {},
+      projection: {category: 1, _id: 0},
+    };
+    if (prefix) {
+      findOptions.query = {
+        category: { $regex: `^${prefix}`},
+      }
+    }
+    return mongo.find(collectionName, findOptions)
+      .then(kts => kts.map(o => o.category))
+      .then(kts => kts.filter(k => k));
+  },
 }

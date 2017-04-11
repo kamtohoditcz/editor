@@ -19,7 +19,6 @@ var app = express();
 // view engine setup
 // TODO this shall probly go to separate file
 hbs.registerHelper("equals", function(a, b, options) {
-  console.log('testing equals', {a, b, options});
   if (a === b) {
     return options.fn(this);
   }

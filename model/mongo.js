@@ -83,10 +83,13 @@ module.exports = mymongo = {
 
       if (findOptions) {
         // perform the find
-        cursor = collection.find(findOptions.query, findOptions.options);
+        cursor = collection.find(findOptions.query, findOptions.projection);
 
         // sort the results
+        if (findOptions.map) { cursor.map(findOptions.map); }
         if (findOptions.sort) { cursor.sort(findOptions.sort); }
+
+        // pagination
         // if (findOptions.skip) { cursor.skip(findOptions.skip); }
         // if (findOptions.limit) { cursor.limit(findOptions.limit); }
 
@@ -106,7 +109,7 @@ module.exports = mymongo = {
     return performOperation(collectionName, (collection) => {
 
       // See: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#findOne
-      var documentPromise = collection.findOne(findOptions);
+      var documentPromise = collection.findOne(findOptions.query);
       return documentPromise;
 
     });
@@ -116,11 +119,11 @@ module.exports = mymongo = {
 
   findText: (collectionName, text) => {
     var query = buildQuery(text);
-    return mymongo.find(collectionName, { query: query });
+    return mymongo.find(collectionName, {query: query});
   },
 
   get: (collectionName, documentId) => {
-    return mymongo.findOne(collectionName, { _id: new ObjectID(documentId) });
+    return mymongo.findOne(collectionName, {query: {_id: new ObjectID(documentId)}});
   },
 
   listAll: (collectionName) => {
