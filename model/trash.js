@@ -60,7 +60,11 @@ module.exports = {
       }
     }
     return mongo.find(collectionName, findOptions)
-      .then(kts => kts.map(o => o.category))
-      .then(kts => kts.filter(k => k));
+      .then((kts) => {
+        return kts.map(o => o.category) // { category: "asdf" } --> "asdf"
+                  .filter(k => k) // omit null values
+                  .sort() // sort ;)
+                  .filter(function(el, i, a){ return i == a.indexOf(el); }); //uniq
+      });
   },
 }
