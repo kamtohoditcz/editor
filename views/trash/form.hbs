@@ -1,5 +1,4 @@
-<script>
-$(function() {
+<script> $(function() {
 
   var categoryXhr;
   $('#category').autoComplete({
@@ -29,35 +28,49 @@ $(function() {
   <div class="form-group">
     <label for="name"> JMÉNO: </label>
     <input type="input" id="name" name="name" class="form-control" placeholder="například: krabice od pizzy" value="{{name}}" />
-    {{!-- <small id="nameHelp" class="form-text text-muted">co nejvýstižnějsí jméno pro odpadek</small> --}}
+    <small id="nameHelp" class="form-text text-muted">Co nejvýstižnějsí jméno pro odpadek. </small>
   </div>
+  {{!--
+  <div class="form-group">
+    <label for="url-name"> URL JMÉNO: </label>
+    <input type="input" id="url-name" url-name="url-name" class="form-control" placeholder="například: krabice-od-pizzy" value="{{url-name}}" />
+    <small id="nameHelp" class="form-text text-muted">URL odpadku</small>
+  </div>
+  --}}
   <div class="form-group">
     <label for="status"> STATUS: </label>
     <select id="status" name="status" class="form-control" value="{{status}}">
       <option value="DRAFT" {{#equals status 'DRAFT'}}selected{{/equals}}>DRAFT</option>
       <option value="PUBLIC" {{#equals status 'PUBLIC'}}selected{{/equals}}>PUBLIC</option>
     </select>
-    {{!-- <small id="statusHelp" class="form-text text-muted">stav odpadku</small> --}}
+    <small id="statusHelp" class="form-text text-muted">DRAFT ještě nehotový. PUBLIC může ven. </small>
   </div>
   <div class="form-group">
-    <label for="aliases"> JINÁ JMÉNA: </label>
-    <input type="input" id="aliases" name="aliases" class="form-control" placeholder="například: pizzabox, krabica na picu" value="{{aliases}}" />
-    {{!-- <small id="aliasesHelp" class="form-text text-muted">další jména pro tentýž odpadek oddělená čárkou</small> --}}
+    <label for="aliases"> ALIAS: </label>
+    <input type="input" id="aliases" name="aliases" class="form-control" placeholder="například: pizzabox krabica na picu" value="{{aliases}}" />
+    <small id="aliasesHelp" class="form-text text-muted">
+        Doplňkový <i>vyhledávací výraz</i> pro tentýž odpadek. Nemusí jako
+        celek dávat smysl. Uživatel ho neuvidí.  Slova ve výrazu by ale měla
+        být v pořadí, v jakém je uživatel bude zadávat při hledání.  <br/>
+        Například <i>"kočičí miska pro kočku"</i> je zároveň <i>"kočičí miska"</i>
+        a <i>"miska pro kočku"</i>, ale když budu hledat <i>"miska kočičí"</i> tak
+        už tenhle výraz nenajdu.
+    </small>
   </div>
-  <div class="form-group">
-    <label for="category"> KATEGORIE: </label>
+  <div class="form-group"> <label for="category"> KATEGORIE: </label>
     <input type="input" id="category" name="category" class="form-control" placeholder="například: papír/znečištěný" value="{{category}}" />
+    <small id="categoryHelp" class="form-text text-muted">Lomítkem oddělená kategorie. Zatím zadáváme intuitivně co kam zapadá. Našeptávač by měl poradit ;) Když nevíte, nechte prázdnou. </small>
   </div>
   <div class="form-group">
     <label for="description"> POPIS: </label>
     <textarea id="description" name="description" class="form-control">{{description}}</textarea>
-    {{!-- <small id="noteHelp" class="form-text text-muted">dodatečný popis, prvních 160 znaků bude
-       zobrazeno pod vyhledáváním, zbytek až u samotného odpadku</small> --}}
+    <small id="descriptionHelp" class="form-text text-muted">Dodatečný popis k odpadku. Sem se píše na co jsme přišli.
+      Prvních 160 znaků bude zobrazeno v seznamech odpadků, zbytek až na stránce detailu. </small>
   </div>
   <div class="form-group">
     <label for="note"> POZNÁMKA: </label>
     <textarea id="note" name="note" class="form-control">{{note}}</textarea>
-    {{!-- <small id="noteHelp" class="form-text text-muted">pouze pro výzkum, nebude zobrazena na webu</small> --}}
+    <small id="noteHelp" class="form-text text-muted">Pouze pro výzkum, nebude zobrazena na webu. </small>
   </div>
   <div>
     <a href="#" onclick="$(this).closest('form').submit()"> uložit změny </a>
