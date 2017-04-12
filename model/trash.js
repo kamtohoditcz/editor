@@ -64,7 +64,7 @@ module.exports = {
         return kts.map(o => o.category) // { category: "asdf" } --> "asdf"
                   .filter(k => k) // omit null values
                   .sort() // sort ;)
-                  .filter(function(el, i, a){ return i == a.indexOf(el); }); //uniq
+                  .filter(function(el, i, a){ return i == a.length - 1 || a[i + 1] != el ; }); //uniq
       });
   },
 }
