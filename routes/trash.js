@@ -29,10 +29,7 @@ router.get('/kategorie', function (req, res) {
   var q = req.query.q;
   var t = req.query.t;
   trash.listCategories(q).then(function (kategorie) {
-    //if (t === 'json') {
-      console.log('returning json', kategorie);
-      res.json(kategorie);
-    //}
+    res.json(kategorie);
   }).catch(vyblejChybu(res));
 });
 
@@ -138,19 +135,14 @@ router.get('/:id/nahraj-obrazek', function (req, res) {
 const imageFieldName = 'image';
 
 function uploadImage(req, res, next) {
-  console.log('nahravam', req.files);
   // No image to process
   if (!req.files || !req.files[imageFieldName])
     throw Error("No file found.");
 
   let fileObj = req.files[imageFieldName];
 
-  console.log('we got image', fileObj); 
-
   if (!fileObj.mimetype in ['image/jpeg', 'image/png'])
     throw Error("Invalid file type: " + fileObj.mimetype);
-
-  console.log('mime checked');
 
   var randomName = fileObj.uuid;
   var resPath = `/uploads/trash/500x500-${randomName}.png`;
@@ -161,7 +153,7 @@ function uploadImage(req, res, next) {
     .resize(500, 500)
     .crop(sharp.strategy.entropy)
     .on('error', function(err) {
-      console.log('ERROR: Failed to convert with err:', {err, fileObj});
+      //console.log('ERROR: Failed to convert with err:', {err, fileObj});
       throw err;
     })
     .toFile(destPath)
@@ -174,13 +166,10 @@ function uploadImage(req, res, next) {
     .catch((err) => {
       next(err);
     });
-
-  console.log('all created');
 }
 
 // upload-image - post
 router.post('/:id/nahraj-obrazek', uploadImage, function (req, res) {
-  console.log('donahral jsem');
   if (req.file) {
     const id = req.params.id;
     const path = req.file.path;
