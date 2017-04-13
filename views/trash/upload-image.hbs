@@ -1,11 +1,8 @@
-
-
+<h1>{{name}}</h1>
 <div id="image-uploader" style="widht: 100%;">
-  <input id="fileupload" type="file" name="image" data-url="/test/upload" style="display: none;">
-  <!-- <img class="droplaceholder" src="http://placehold.it/500x500" style="width: 100%;"> -->
-  <!-- now created using https://dummyimage.com/800x600/292929/e3e3e3&text=click%20or%20drop -->
+  <input id="fileupload" type="file" name="image" data-url="/odpadky/{{_id}}/nahraj-obrazek" style="display: none;">
   <img id="dropzone" class="fade well" src="/img/clickordrop.png" style="width: 100%;">
-  <div id="progress" style="margin-top: -1px; width: 100%; background: #55a; display: none;">
+  <div id="progress" style="margin-top: -1px; width: 100%; max-width: 500px; background: #55a; display: none;">
       <div class="bar" style="width: 0%; height: 1px; background: #aaf;"></div>
   </div>
 </div>
@@ -17,6 +14,7 @@
 <script src="/js/jquery.fileupload.js"></script>
 <script src="/js/jquery.fileupload-process.js"></script>
 <script src="/js/jquery.fileupload-image.js"></script>
+
 <style>
 #dropzone {
   opacity: 1;
@@ -123,11 +121,11 @@ $(function () {
           $alert.hide('slow').remove();
         }, 3000);
       } else {
-        //$alert = $('<div class="alert alert-success" role="alert"> Obrázek nahrán ;-) </div>').prependTo('#image-uploader');
-        //setTimeout(function(){
-        //  $alert.hide('slow').remove();
-        //}, 3000);
         $('#dropzone').attr('src', data.result.path);
+        $alert = $('<div class="alert alert-success" role="alert"> Je to tam, díííík ;-)<br/>Za chvíli tě to přesměruje na ten odpadek. </div>').prependTo('#image-uploader');
+        setTimeout(function(){
+          document.location = '/odpadky/{{_id}}';
+        }, 3000);
       }
     },
 

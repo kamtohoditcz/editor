@@ -37,7 +37,7 @@ hbs.registerPartials(__dirname + '/views/partials');
 app.use(logger('dev'));
 busboy.extend(app, {
   upload: true,
-  allowedPath: /upload$/,
+  allowedPath: /odpadky\/.*\/nahraj-obrazek$/,
   mimeTypeLimit: [
     'image/jpeg',
     'image/png',

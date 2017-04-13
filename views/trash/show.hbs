@@ -15,8 +15,8 @@ vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{
 | naposledy upraven {{last_edit_date}} {{#if last_edit_user}} uživatelem {{last_edit_user}} {{/if}}
 </p>
 
-{{#if image}}
-  <img src="{{image.url}}" />
+{{#if imagePath}}
+  <img src="{{imagePath}}" />
 {{/if}}
 
 {{#if description}}
@@ -35,6 +35,7 @@ vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{
 
 <p>
 	<a href="/odpadky/{{_id}}/upravit">upravit</a> |
+	<a href="/odpadky/{{_id}}/nahraj-obrazek">nahraj obrázek</a> |
 	<a href="/odpadky">seznam odpadků</a> |
 	{{> trash/delete}}
 </p>

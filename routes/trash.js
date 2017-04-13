@@ -4,9 +4,7 @@ var trash = require('../model/trash');
 var express = require('express');
 var router = express.Router();
 var moment = require('moment');
-
-var multer  = require('multer')
-var upload = multer({ dest: 'public/uploads/trash' }).single('image');
+var sharp = require('sharp');
 
 var vyblejChybu = function (res) {
   return function (err) {
@@ -104,30 +102,101 @@ router.post('/:id', function (req, res) {
     .catch(vyblejChybu(res));
 });
 
-// upload image - post
-router.post('/:id/nahrat-obrazek', upload, function (req, res) {
-  var id = req.params.id;
-  if (req.file) {
-    console.log('GOT FILEEEEEE: ', {path} = req.file);
-    losDatos.image = {
-      url: req.file.path
-    }
-  }
-  trash.update(id, losDatos)
-    .then(function (odpadek) {
-      res.redirect(`/odpadky/${id}`);
-    })
-    .catch(vyblejChybu(res));
-});
-
 // delete
 router.delete('/:id', function (req, res) {
-  trash.delete(req.params.id)
+  trash
+    .delete(req.params.id)
     .then(function (odpadek) {
       res.redirect('/odpadky');
     })
     .catch(vyblejChybu(res));
 });
 
+// ----------------------------------------------------------------------------
+
+//TODO
+//// upload-images - get
+//router.get('/:id/nahraj-obrazky', function (req, res) {
+//  trash
+//    .listAll()
+//    .then(function (odpadky) {
+//      res.render('trash/upload-images', odpadky);
+//    })
+//    .catch(vyblejChybu(res));
+//});
+
+// upload-image - get
+router.get('/:id/nahraj-obrazek', function (req, res) {
+  trash
+    .read(req.params.id)
+    .then(function (odpadek) {
+      res.render('trash/upload-image', odpadek);
+    })
+    .catch(vyblejChybu(res));
+});
+
+const imageFieldName = 'image';
+
+function uploadImage(req, res, next) {
+  console.log('nahravam', req.files);
+  // No image to process
+  if (!req.files || !req.files[imageFieldName])
+    throw Error("No file found.");
+
+  let fileObj = req.files[imageFieldName];
+
+  console.log('we got image', fileObj); 
+
+  if (!fileObj.mimetype in ['image/jpeg', 'image/png'])
+    throw Error("Invalid file type: " + fileObj.mimetype);
+
+  console.log('mime checked');
+
+  var randomName = fileObj.uuid;
+  var resPath = `/uploads/trash/500x500-${randomName}.png`;
+  var destPath = `public${resPath}`;
+
+  // Store cropped
+  sharp(fileObj.file)
+    .resize(500, 500)
+    .crop(sharp.strategy.entropy)
+    .on('error', function(err) {
+      console.log('ERROR: Failed to convert with err:', {err, fileObj});
+      throw err;
+    })
+    .toFile(destPath)
+    .then(() => {
+      req.file = Object.assign({}, fileObj, {
+        path: resPath,
+      });
+      next();
+    })
+    .catch((err) => {
+      next(err);
+    });
+
+  console.log('all created');
+}
+
+// upload-image - post
+router.post('/:id/nahraj-obrazek', uploadImage, function (req, res) {
+  console.log('donahral jsem');
+  if (req.file) {
+    const id = req.params.id;
+    const path = req.file.path;
+    trash
+      .read(id)
+      .then((odpadek) => {
+        odpadek.imagePath = path;
+        return trash.update(id, odpadek)
+      })
+      .then(() => {
+        res.json({path});
+      })
+      .catch(vyblejChybu(res));
+  } else {
+    throw Error('Failed to upload image.');
+  }
+});
 
 module.exports = router;
