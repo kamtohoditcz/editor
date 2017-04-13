@@ -37,8 +37,6 @@ var performOperation = (collectionName, operationFunction) => {
   return operationPromise;
 }
 
-var buildQuery = require('./search-query-builder');
-
 // -----------------------------------------------------------------------------
 
 
@@ -116,11 +114,6 @@ module.exports = mymongo = {
   },
 
   // ---------------------------------------------------------------------------
-
-  findText: (collectionName, text) => {
-    var query = buildQuery(text);
-    return mymongo.find(collectionName, {query: query});
-  },
 
   get: (collectionName, documentId) => {
     return mymongo.findOne(collectionName, {query: {_id: new ObjectID(documentId)}});

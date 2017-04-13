@@ -5,11 +5,13 @@ var mongo = require('./mongo');
 
 var collectionName = 'trash';
 
-module.exports = {
+var buildQuery = require('./search-query-builder');
+
+module.exports = mytrash = {
   listAll: function (text) {
     console.log('MONGO: Calling mongo.listAll');
     if (text) {
-      return mongo.findText(collectionName, text);
+      return mytrash.findText(collectionName, text);
     } else {
       return mongo.listAll(collectionName);
     }
@@ -48,6 +50,13 @@ module.exports = {
         return result;
       });
   },
+  
+  // --------------------------------------------------------------------------
+
+  findText: (collectionName, text) => {
+    var query = buildQuery(text);
+    return mongo.find(collectionName, {query: query});
+  },
 
   listCategories: function (prefix) {
     let findOptions = {
@@ -62,6 +71,36 @@ module.exports = {
     return mongo.find(collectionName, findOptions)
       .then((kts) => {
         return kts.map(o => o.category) // { category: "asdf" } --> "asdf"
+                  .filter(k => k) // omit null values
+                  .sort() // sort ;)
+                  .filter(function(el, i, a){ return i == a.length - 1 || a[i + 1] != el ; }); //uniq
+      });
+  },
+
+  listIdeas: function (prefix) {
+    //let findOptions = {
+    //  query: {},
+    //  projection: {category: 1, name: 1, _id: 0},
+    //};
+    //if (prefix) {
+    //  findOptions.query = {
+    //    $or: [
+    //      { name: { $regex: `^${prefix}`}},
+    //      { aliases: { $regex: `^${prefix}`}},
+    //    ]
+    //  }
+    //}
+    //return mongo.find(collectionName, findOptions)
+    //  .then((kts) => {
+    //    return kts.map(o => `${o.name} (${o.category})`) // { category: 'sth/else', name: 'asdf' } --> 'sth/else/asdf'
+    //              .filter(k => k) // omit null values
+    //              .sort() // sort ;)
+    //              .filter(function(el, i, a){ return i == a.length - 1 || a[i + 1] != el ; }); //uniq
+    //  });
+    return mytrash
+      .listAll(prefix)
+      .then((resArr) => {
+        return resArr.map(o => `${o.name} (${o.category})`) // { category: 'sth/else', name: 'asdf' } --> 'sth/else/asdf'
                   .filter(k => k) // omit null values
                   .sort() // sort ;)
                   .filter(function(el, i, a){ return i == a.length - 1 || a[i + 1] != el ; }); //uniq

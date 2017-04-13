@@ -1,0 +1,50 @@
+<script> $(function() {
+  var $ideas = $('#ideas');
+  var $value = $('#value');
+
+  var ideasXhr;
+  $value.autoComplete({
+      minChars: 0,
+      delay: 300,
+      source: function(term, response){
+        try { ideasXhr.abort(); } catch(e){}
+        ideasXhr = $.getJSON('/odpadky/napady', { q: term }, function(data){ response(data); });
+      },
+      //onSelect: function(event, term, item) {
+      // TODO go to the trash..?
+      //},
+  });
+
+  $ideas.submit(function(e) {
+    var value = $value.val();
+    $.ajax({
+      method: 'PUT',
+      url: '/odpadky/napady',
+      data: { name: value },
+      success: function(data) {
+        console.log(data);
+        alertGood('Odpadek vytvořen ;-) <a href="/odpadky/' + data.id + '">' + value + '</a>');
+      },
+    });
+    e.preventDefault();
+    return false;
+  });
+
+  function alertGood(text) {
+      console.log('creating alert', text);
+      var $alert = $('<div class="alert alert-success" role="alert">' + text + '</div>').prependTo('#result');
+      setTimeout(function(){ console.log('removing alert'); $alert.hide('slow').remove(); }, 30000);
+  };
+
+  function alertBaad(text) {
+      var $alert = $('<div class="alert alert-danger" role="alert">' + text + '</div>').prependTo('#result');
+      setTimeout(function(){ $alert.hide('slow').remove(); }, 3000);
+  };
+});
+</script>
+
+<form id="ideas">
+  <input id="value" type="text"/>
+  <button type="submit">Vytvořit</button>
+</form>
+<div id="result"></div>

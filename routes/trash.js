@@ -24,6 +24,30 @@ var convertDates = function (odpadek) {
 
 // -----------------------------------------------------------------------------
 
+// ideamaker
+router.get('/napadovnik', function (req, res) {
+  res.render('trash/ideamaker');
+});
+
+// list ideas 
+router.get('/napady', function (req, res) {
+  var q = req.query.q;
+  trash.listIdeas(q).then(function (napady) {
+    res.json(napady);
+  }).catch(vyblejChybu(res));
+});
+
+// create trash from idea
+router.put('/napady', function (req, res) {
+  trash.create(req.body)
+    .then(function (id) {
+      res.json({id});
+    })
+    .catch(vyblejChybu(res));
+});
+
+// -----------------------------------------------------------------------------
+
 // list categories
 router.get('/kategorie', function (req, res) {
   var q = req.query.q;
@@ -32,6 +56,9 @@ router.get('/kategorie', function (req, res) {
     res.json(kategorie);
   }).catch(vyblejChybu(res));
 });
+
+// ----------------------------------------------------------------------------
+
 
 // list
 router.get('/', function (req, res) {
@@ -57,8 +84,7 @@ router.get('/novy', function (req, res) {
 
 // create - put
 router.put('/', function (req, res) {
-  var losDatos = req.body;
-  trash.create(losDatos)
+  trash.create(req.body)
     .then(function (id) {
       res.redirect(`/odpadky/${id}`);
     })
@@ -91,8 +117,7 @@ router.get('/:id/upravit', function (req, res) {
 // update - post
 router.post('/:id', function (req, res) {
   var id = req.params.id;
-  var losDatos = req.body;
-  trash.update(id, losDatos)
+  trash.update(id, req.body)
     .then(function (odpadek) {
       res.redirect(`/odpadky/${id}`);
     })
