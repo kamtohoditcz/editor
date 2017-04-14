@@ -92,11 +92,10 @@ module.exports = mymongo = {
         // if (findOptions.limit) { cursor.limit(findOptions.limit); }
 
       } else {
-        console.log('running pure find')
         cursor = collection.find({});
       }
       var documentsArrayPromise = cursor.toArray();
-      documentsArrayPromise.then((data) => { console.log('found data: ', data); })
+      //documentsArrayPromise.then((data) => { console.log('found data: ', data); })
       return documentsArrayPromise;
 
     });

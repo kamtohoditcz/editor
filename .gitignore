@@ -50,4 +50,4 @@ cassettes
 Makefile
 .node-version
 A
-public/uploads/trash/*.png
+public/uploads/*/*
