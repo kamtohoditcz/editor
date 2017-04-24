@@ -6,7 +6,7 @@
 //   sort: { score: { $meta: "textScore" } },
 // };
 
-var sameChars = ['aá', 'cč', 'dď', 'eéě', 'ií', 'nň', 'oó', 'rř', 'sš', 'tť', 'uúů', 'yý', 'zž'];
+var sameCharsRegExps = ['aá', 'cč', 'dď', 'eéě', 'ií', 'nň', 'oó', 'rř', 'sš', 'tť', 'uúů', 'yý', 'zž'].map(chars => new RegExp(`[${chars}]`, 'ig'));
 
 module.exports = (text) => {
   text = text.trim();
@@ -14,7 +14,7 @@ module.exports = (text) => {
   text = text.replace(' ', '.* ');
 
   // cestina
-  text = sameChars.reduce((text, s) => text.replace(`[${s}]`, `[${s}]`), text);
+  text = sameCharsRegExps.reduce((text, re) => text.replace(re, re.source), text);
 
   var re = { $regex: text, $options: 'gim' };
 
