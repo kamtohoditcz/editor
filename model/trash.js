@@ -50,30 +50,40 @@ module.exports = mytrash = {
         return result;
       });
   },
-  
+
   // --------------------------------------------------------------------------
 
   findText: (collectionName, text) => {
     var query = buildQuery(text);
-    return mongo.find(collectionName, {query: query});
+    return mongo.find(collectionName, { query: query });
   },
 
   listCategories: function (prefix) {
     let findOptions = {
       query: {},
-      projection: {category: 1, _id: 0},
+      projection: { category: 1, _id: 0 },
     };
     if (prefix) {
       findOptions.query = {
-        category: { $regex: `^${prefix}`},
+        category: { $regex: `^${prefix}` },
       }
     }
     return mongo.find(collectionName, findOptions)
       .then((kts) => {
         return kts.map(o => o.category) // { category: "asdf" } --> "asdf"
-                  .filter(k => k) // omit null values
-                  .sort() // sort ;)
-                  .filter(function(el, i, a){ return i == a.length - 1 || a[i + 1] != el ; }); //uniq
+          .filter(k => k) // omit null values
+          .sort() // sort ;)
+          .filter(function (el, i, a) { return i == a.length - 1 || a[i + 1] != el; }); //uniq
+      });
+  },
+
+  sampleNoImage: function () {
+    return mongo
+      .aggregate(collectionName, {
+        query: [
+          { $match: { imagePath: null } },
+          { $sample: { size: 3 } },
+        ]
       });
   },
 
@@ -101,9 +111,9 @@ module.exports = mytrash = {
       .listAll(prefix)
       .then((resArr) => {
         return resArr.map(o => `${o.name} (${o.category})`) // { category: 'sth/else', name: 'asdf' } --> 'sth/else/asdf'
-                  .filter(k => k) // omit null values
-                  .sort() // sort ;)
-                  .filter(function(el, i, a){ return i == a.length - 1 || a[i + 1] != el ; }); //uniq
+          .filter(k => k) // omit null values
+          .sort() // sort ;)
+          .filter(function (el, i, a) { return i == a.length - 1 || a[i + 1] != el; }); //uniq
       });
   },
 }

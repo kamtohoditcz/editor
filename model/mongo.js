@@ -72,6 +72,22 @@ module.exports = mymongo = {
     });
   },
 
+  aggregate: (collectionName, aggregateOptions) => {
+    console.log(`START - mymongo.aggregate("${collectionName}", ${aggregateOptions})`);
+    return performOperation(collectionName, (collection) => {
+      var cursor;
+
+      if (aggregateOptions) {
+        cursor = collection.aggregate(aggregateOptions.query);
+      } else {
+        cursor = collection.aggregate({});
+      }
+      var documentsArrayPromise = cursor.toArray();
+      //documentsArrayPromise.then((data) => { console.log('found data: ', data); })
+      return documentsArrayPromise;
+    });
+  },
+
   // See: http://mongodb.github.io/node-mongodb-native/2.2/api/Collection.html#find
   find: (collectionName, findOptions) => {
     console.log(`START - mymongo.find("${collectionName}", ${findOptions})`);
@@ -115,7 +131,7 @@ module.exports = mymongo = {
   // ---------------------------------------------------------------------------
 
   get: (collectionName, documentId) => {
-    return mymongo.findOne(collectionName, {query: {_id: new ObjectID(documentId)}});
+    return mymongo.findOne(collectionName, { query: { _id: new ObjectID(documentId) } });
   },
 
   listAll: (collectionName) => {

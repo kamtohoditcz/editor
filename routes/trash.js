@@ -32,7 +32,7 @@ router.get('/napadovnik', function (req, res) {
   res.render('trash/ideamaker');
 });
 
-// list ideas 
+// list ideas
 router.get('/napady', function (req, res) {
   var q = req.query.q;
   trash.listIdeas(q).then(function (napady) {
@@ -44,7 +44,7 @@ router.get('/napady', function (req, res) {
 router.put('/napady', function (req, res) {
   trash.create(req.body)
     .then(function (id) {
-      res.json({id});
+      res.json({ id });
     })
     .catch(vyblejChybu(res));
 });
@@ -62,6 +62,99 @@ router.get('/kategorie', function (req, res) {
 
 // ----------------------------------------------------------------------------
 
+//TODO
+//// upload-images - get
+//router.get('/:id/nahraj-obrazky', function (req, res) {
+//  trash
+//    .listAll()
+//    .then(function (odpadky) {
+//      res.render('trash/upload-images', odpadky);
+//    })
+//    .catch(vyblejChybu(res));
+//});
+
+router.get('/bez-obrazku', function (req, res) {
+  trash
+    .sampleNoImage()
+    .then(function (odpadky) {
+      res.json(odpadky);
+    })
+    .catch(vyblejChybu(res));
+});
+
+// upload-image - get
+router.get('/:id/nahraj-obrazek', function (req, res) {
+  trash
+    .read(req.params.id)
+    .then(function (odpadek) {
+      res.render('trash/upload-image', odpadek);
+    })
+    .catch(vyblejChybu(res));
+});
+
+const imageFieldName = 'image';
+
+function uploadImage(req, res, next) {
+  // No image to process
+  if (!req.files || !req.files[imageFieldName])
+    throw Error("No file found.");
+
+  let fileObj = req.files[imageFieldName];
+
+  if (!fileObj.mimetype in ['image/jpeg', 'image/png'])
+    throw Error("Invalid file type: " + fileObj.mimetype);
+
+  var randomName = fileObj.uuid;
+  var resPath = `/uploads/trash/500x500-${randomName}.png`;
+  var destPath = `${settings.PROJECT_DIR}/public${resPath}`;
+
+
+  // Copy the original image - we don't care about errors here...
+  fs.copy(fileObj.file, `${settings.PROJECT_DIR}/public/uploads/orig/${randomName}-${fileObj.filename}`, err => {
+    if (err) return console.error('Failed to copy original file.', err);
+  });
+
+  // Store cropped
+  sharp(fileObj.file)
+    .resize(500, 500)
+    .crop(sharp.strategy.entropy)
+    .on('error', function (err) {
+      //console.log('ERROR: Failed to convert with err:', {err, fileObj});
+      throw err;
+    })
+    .toFile(destPath)
+    .then(() => {
+      req.file = Object.assign({}, fileObj, {
+        path: resPath,
+      });
+      next();
+    })
+    .catch((err) => {
+      next(err);
+    });
+}
+
+// upload-image - post
+router.post('/:id/nahraj-obrazek', uploadImage, function (req, res) {
+  if (req.file) {
+    const id = req.params.id;
+    const path = req.file.path;
+    trash
+      .read(id)
+      .then((odpadek) => {
+        odpadek.imagePath = path;
+        return trash.update(id, odpadek)
+      })
+      .then(() => {
+        res.json({ path });
+      })
+      .catch(vyblejChybu(res));
+  } else {
+    throw Error('Failed to upload image.');
+  }
+});
+
+// ----------------------------------------------------------------------------
 
 // list
 router.get('/', function (req, res) {
@@ -137,89 +230,5 @@ router.delete('/:id', function (req, res) {
     .catch(vyblejChybu(res));
 });
 
-// ----------------------------------------------------------------------------
-
-//TODO
-//// upload-images - get
-//router.get('/:id/nahraj-obrazky', function (req, res) {
-//  trash
-//    .listAll()
-//    .then(function (odpadky) {
-//      res.render('trash/upload-images', odpadky);
-//    })
-//    .catch(vyblejChybu(res));
-//});
-
-// upload-image - get
-router.get('/:id/nahraj-obrazek', function (req, res) {
-  trash
-    .read(req.params.id)
-    .then(function (odpadek) {
-      res.render('trash/upload-image', odpadek);
-    })
-    .catch(vyblejChybu(res));
-});
-
-const imageFieldName = 'image';
-
-function uploadImage(req, res, next) {
-  // No image to process
-  if (!req.files || !req.files[imageFieldName])
-    throw Error("No file found.");
-
-  let fileObj = req.files[imageFieldName];
-
-  if (!fileObj.mimetype in ['image/jpeg', 'image/png'])
-    throw Error("Invalid file type: " + fileObj.mimetype);
-
-  var randomName = fileObj.uuid;
-  var resPath = `/uploads/trash/500x500-${randomName}.png`;
-  var destPath = `${settings.PROJECT_DIR}/public${resPath}`;
-
-
-  // Copy the original image - we don't care about errors here...
-  fs.copy(fileObj.file, `${settings.PROJECT_DIR}/public/uploads/orig/${randomName}-${fileObj.filename}`, err => {
-    if (err) return console.error('Failed to copy original file.', err);
-  });
-
-  // Store cropped
-  sharp(fileObj.file)
-    .resize(500, 500)
-    .crop(sharp.strategy.entropy)
-    .on('error', function(err) {
-      //console.log('ERROR: Failed to convert with err:', {err, fileObj});
-      throw err;
-    })
-    .toFile(destPath)
-    .then(() => {
-      req.file = Object.assign({}, fileObj, {
-        path: resPath,
-      });
-      next();
-    })
-    .catch((err) => {
-      next(err);
-    });
-}
-
-// upload-image - post
-router.post('/:id/nahraj-obrazek', uploadImage, function (req, res) {
-  if (req.file) {
-    const id = req.params.id;
-    const path = req.file.path;
-    trash
-      .read(id)
-      .then((odpadek) => {
-        odpadek.imagePath = path;
-        return trash.update(id, odpadek)
-      })
-      .then(() => {
-        res.json({path});
-      })
-      .catch(vyblejChybu(res));
-  } else {
-    throw Error('Failed to upload image.');
-  }
-});
 
 module.exports = router;

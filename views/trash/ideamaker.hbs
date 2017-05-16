@@ -1,6 +1,22 @@
+<style>
+.bg-dark {
+    color: #fff;
+    background-color: #222;
+}
+.megatopic {
+  font-size: 64px;
+}
+section {
+  padding: 100px 0;
+}
+</style>
+
 <script> $(function() {
-  var $ideas = $('#ideas');
-  var $value = $('#value');
+  var $ideas = $('.js-ideas');
+  var $value = $('.js-ideas-value');
+  var $result = $('.js-ideas-result');
+  var T_30SEC = 30000;
+  var T_3SEC = 3000;
 
   var ideasXhr;
   $value.autoComplete({
@@ -22,8 +38,10 @@
       url: '/odpadky/napady',
       data: { name: value },
       success: function(data) {
-        console.log(data);
         alertGood('Odpadek vytvořen ;-) <a href="/odpadky/' + data.id + '">' + value + '</a>');
+      },
+      error: function(data) {
+        alertBaad('Něco se ošklivým způsobem nepovedlo. ');
       },
     });
     e.preventDefault();
@@ -31,22 +49,266 @@
   });
 
   function alertGood(text) {
-      console.log('creating alert', text);
-      var $alert = $('<div class="alert alert-success" role="alert">' + text + '</div>').prependTo('#result');
-      setTimeout(function(){ console.log('removing alert'); $alert.hide('slow').remove(); }, 30000);
+      var $alert = $('<div class="alert alert-success" role="alert">' + text + '</div>').prependTo($result);
+      setTimeout(function(){ $alert.hide('slow').remove(); }, T_30SEC);
   };
 
   function alertBaad(text) {
-      var $alert = $('<div class="alert alert-danger" role="alert">' + text + '</div>').prependTo('#result');
-      setTimeout(function(){ $alert.hide('slow').remove(); }, 3000);
+      var $alert = $('<div class="alert alert-danger" role="alert">' + text + '</div>').prependTo($result);
+      setTimeout(function(){ $alert.hide('slow').remove(); }, T_3SEC);
   };
 });
 </script>
 
-<form id="ideas" class="form-inline">
-  <div class="row" style="width: 100%;">
-    <input id="value" class="form-control col-10" type="text"/>
-    <button class="btn col-2" type="submit">Vytvořit</button>
-  </div>
-</form>
-<div id="result"></div>
+<!--  -->
+<!--  -->
+<!--  -->
+
+<section class="container text-center">
+  <h1 class="megatopic"> 1. bouře mozků </h1>
+  <form class="js-ideas form-inline text-center">
+    <div class="row" style="width: 95%;">
+      <input class="js-ideas-value form-control col-10" type="text"/>
+      <button class="btn col-2" type="submit">Vytvořit</button>
+    </div>
+  </form>
+  <div class="js-ideas-result"></div>
+</section>
+
+<!--  -->
+<!--  -->
+<!--  -->
+
+<script src="/js/vendor/jquery.ui.widget.js"></script>
+<script src="/js/jquery.iframe-transport.js"></script>
+<script src="/js/load-image.all.min.js"></script>
+<script src="/js/canvas-to-blob.min.js"></script>
+<script src="/js/jquery.fileupload.js"></script>
+<script src="/js/jquery.fileupload-process.js"></script>
+<script src="/js/jquery.fileupload-image.js"></script>
+
+<style>
+.no-pictures-list {
+  width: 100%;
+  height: 256px;
+}
+.image-uploader {
+  border: 0;
+  background: rgba(255, 255, 255, 0);
+}
+.image-uploader__input {
+  display: none;
+}
+.image-uploader__dropzone {
+  width: 100%;
+  /*background-image: url("/img/clickordrop.png")*/
+  opacity: 1;
+  border: 5px solid #292929;
+}
+.image-uploader__dropzone.fade:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+.image-uploader__dropzone.fade.in {
+    border: 5px dashed #292929;
+}
+.image-uploader__dropzone.fade.in.hover {
+    opacity: 0.7;
+}
+.image-uploader__dropzone.fade {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}
+.image-uploader__progress {
+   margin-top: -1px;
+   width: 100%;
+   max-width: 500px;
+   background: #55a;
+   display: none;
+}
+.image-uploader__progress-bar {
+   width: 0%;
+   height: 1px;
+   background: #aaf;
+}
+</style>
+
+<script>
+$(function () {
+  // Prevent default drop actions
+  $(document).bind('drop dragover', function (e) {
+    // Just in case
+    var $dropzone = $('.js-dropzone');
+    $dropzone.removeClass('in hover');
+    // Prevent it all
+    e.preventDefault();
+  });
+
+  // Cleanup after drag event
+  $(document).bind('dragleave', function (e) {
+    var $dropzone = $('.js-dropzone');
+    $dropzone.removeClass('in hover');
+  });
+
+  // Handle the dragover event
+  $(document).bind('dragover', function (e) {
+    var $dropzone = $('.js-dropzone');
+    var $node = $(e.target);
+
+    // Remove hover on all
+    $dropzone.addClass('in');
+    $dropzone.removeClass('hover');
+
+    // Add hover to current dropzone
+    $dropzone = $node.parents().andSelf().filter('.js-dropzone');
+    $dropzone.addClass('hover');
+  });
+
+  $('.js-refresh-pictures').click(evt => { evt.preventDefault(); reloadNoPictures() });
+
+  // Create the no pictures
+  var $nopictureslist = $('.js-no-pictures-list');
+
+  // Reload on swipe side
+  $nopictureslist.on('swipe')
+
+  function replacePictureUploader($oldUploader) {
+    fetchNoPictures(data => {
+      if (!data) return;
+      $oldUploader.fadeOut('slow', function(){
+         var $newUploader = initFileUploadElement(data[0]).hide();
+         $oldUploader.replaceWith($newUploader);
+         $newUploader.fadeIn('slow');
+      });
+    });
+  }
+
+  function fetchNoPictures(cb) {
+    $.ajax({
+      method: 'GET',
+      url: '/odpadky/bez-obrazku',
+      success: cb,
+      error: function(data) {
+        alertBaad('Něco se ošklivým způsobem nepovedlo. ');
+      },
+    });
+  }
+
+  function reloadNoPictures() {
+    fetchNoPictures(function(data){
+      // Cleanup
+      $nopictureslist.children().hide('slow').promise().done(() => {
+        $nopictureslist.empty();
+        if (data && Array.isArray(data)) {
+          // Create the drop areas
+          data.map(initFileUploadElement)
+            .forEach($uploader => {
+              $uploader.hide();
+              $nopictureslist.append($uploader);
+              $uploader.fadeIn('slow');
+            });
+        } else {
+          // Or notify
+          $nopictureslist.append('<h4 class="text-center">Hurá. Žádné odpadky bez obrázků ;D</h4>')
+        }
+      });
+    });
+  }
+
+  reloadNoPictures();
+
+  // Handle the file upload
+  function initFileUploadElement(value) {
+    var $imageuploader = $(`\
+      <div class="card col-12 col-md-4 js-image-uploader image-uploader">\
+        <img class="js-dropzone card-img-top image-uploader__dropzone fade well" src="/img/clickordrop.png">\
+        <h4 class="cardTitle">${value.name}</h4>\
+        <input class="js-fileupload image-uploader__input" type="file" name="image" data-url="/odpadky/${value._id}/nahraj-obrazek">\
+        <div class="js-progress image-uploader__progress">\
+            <div class="js-progress-bar image-uploader__progress-bar"></div>\
+        </div>\
+      </div>\
+    `);
+
+    var $fileupload = $imageuploader.find('.js-fileupload');
+    var $dropzone = $imageuploader.find('.js-dropzone');
+    var $progress = $imageuploader.find('.js-progress');
+    var $progress_bar = $progress.find('.js-progress-bar');
+
+    // Propagate click to the upload element
+    $dropzone.click(() => $fileupload.click());
+
+    $fileupload.fileupload({
+      // Basic thingy
+      dataType: 'json',
+
+      // Enable dropzone
+      dropZone: $dropzone,
+
+      // Allow only jp(e)g or png files
+      acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
+
+      // Enable image resizing, except for Android and Opera,
+      // which actually support image resizing, but fail to
+      // send Blob objects via XHR requests:
+      disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
+      imageMaxWidth: 800,
+      imageMaxHeight: 800,
+      imageCrop: true, // Force cropped images
+
+      // Callbacks
+      add: function (e, data) {
+        $progress_bar.css('width', '0%');
+        $progress.show();
+        data.submit();
+      },
+
+      progressall: function (e, data) {
+        console.log('progress: ', data);
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $progress_bar.css('width', progress + '%');
+      },
+
+      done: function (e, data) {
+        $progress.hide();
+        var $alert;
+        if (data.result.error) {
+          $alert = $('<div class="alert alert-danger" role="alert">'+data.result.error+'</div>').prependTo($imageuploader);
+          setTimeout(function(){
+            $alert.hide('slow').remove();
+          }, 3000);
+        } else {
+          $dropzone.attr('src', data.result.path);
+          $alert = $('<div class="alert alert-success" role="alert"> Je to tam, díííík!</div>').prependTo($imageuploader);
+          setTimeout(function(){
+            replacePictureUploader($imageuploader)
+          }, 3000);
+        }
+      },
+
+      fail: function (e, data) {
+        var $alert = $('<div class="alert alert-danger" role="alert"> Něco se ošklivým způsobem nepovedlo. </div>').prependTo($imageuploader);
+        setTimeout(function(){
+          $alert.hide('slow').remove();
+        }, 3000);
+      },
+
+    }); // $fileupload.fileupload()
+
+    return $imageuploader;
+
+  }; // initFileUploadElement()
+
+}); // document.ready
+
+</script>
+
+<section name="pictures" class="container text-center bg-dark">
+  <button type="button" class="js-refresh-pictures btn pull-right"><i class="fa fa-refresh"></i></button>
+  <h1 class="megatopic"> 2. obrázky </h1>
+  <div class="row js-no-pictures-list no-pictures-list"></div>
+</section>
