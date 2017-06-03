@@ -1,0 +1,11 @@
+<h1>{{name}}</h1>
+<pre>{{code_name}}</pre>
+<p>vytvořena {{creation_date}} | naposledy upravena {{last_edit_date}}</p>
+<p>{{content}}</p>
+<p>
+	<a href="/kontejner/{{id}}/upravit">upravit</a>
+	<a href="/kontejner">seznam kontejneru</a>
+	<a href="/kategorie">seznam kategorií</a>
+	<a href="/odpadky">seznam odpadku</a>
+	{{> container/delete}}
+</p>

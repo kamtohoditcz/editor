@@ -13,7 +13,8 @@ var busboy = require('express-busboy');
 var routesIndex = require('./routes/index');
 var routesTrash = require('./routes/trash');
 var routesBadge = require('./routes/badge');
-//var routesCategory = require('./routes/category');
+var routesCategory = require('./routes/category');
+var routesContainer = require('./routes/container');
 
 var app = express();
 
@@ -65,7 +66,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routesIndex);
 app.use('/odpadky', routesTrash);
 app.use('/znamky', routesBadge);
-//app.use('/kategorie', routesCategory);
+app.use('/kategorie', routesCategory);
+app.use('/kontejner', routesContainer);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

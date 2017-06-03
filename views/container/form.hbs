@@ -1,12 +1,12 @@
 {{#if id}}
-<h1>Upravit kategorii</h1>
+<h1>Upravit kontejner</h1>
 {{else}}
-<h1>Nová kategorie</h1>
+<h1>Novy kontejner</h1>
 {{/if}}
 {{#if id}}
-<form action="/kategorie/{{id}}" method="post" enctype="application/x-www-form-urlencoded">
+<form action="/kontejner/{{id}}" method="post" enctype="application/x-www-form-urlencoded">
 {{else}}
-<form action="/kategorie" method="post" enctype="application/x-www-form-urlencoded">
+<form action="/kontejner" method="post" enctype="application/x-www-form-urlencoded">
 	<input type="hidden" value="PUT" name="_method" />
 {{/if}}
 	<p>
@@ -16,7 +16,7 @@
 	<p>
 		Strojové jméno:
     <input name="code_name" value="{{code_name}}" /><br/>
-    <small>(url alias, třeba <code>papir_znecisteny</code>)</small>
+    <small>(url alias, třeba <code>zluty_kontejner</code>)</small>
 		{{! TODO validovat unikátnost }}
 	</p>
 	<p>
@@ -25,10 +25,11 @@
 	</p>
 	<p>
 		<input type="submit" value="odeslat" />
-		<a href="/kategorie/{{id}}">zrušit</a> |
-		<a href="/kategorie/{{id}}/upravit">obnovit formulář</a> |
+		<a href="/kontejner/{{id}}">zrušit</a> |
+		<a href="/kontejner/{{id}}/upravit">obnovit formulář</a> |
+		<a href="/kontejner">seznam kontejneru</a> |
 		<a href="/kategorie">seznam kategorií</a> |
 		<a href="/odpadky">seznam odpadků</a>
 	</p>
 </form>
-{{> category/delete}}
+{{> container/delete}}

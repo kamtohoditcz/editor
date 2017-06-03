@@ -1,0 +1,29 @@
+<div style="text-align: center;">
+	<h1>Los Kontejneros</h1>
+	<p>&nbsp;</p>
+</div>
+<div class="row">
+	<div class="card col-xs-12 col-md-3 text-center" style="padding: 0;">
+		<a href="/kontejner/novy" class="btn btn-primary" style="width: 100%; height: 100%;">
+			<i class="fa fa-plus-circle fa-5x" aria-hidden="true" style="vertical-align: center;"></i><br/>
+			vytvořit<br/>
+			novy<br/>
+      kontejner
+		</a>
+	</div>
+{{#kontejner}}
+	<div class="card col-xs-12 col-md-3">
+	  {{!-- <img class="card-img-top" src="..." alt="Card image cap"> --}}
+	  <div class="card-block">
+	    <h4 class="card-title"><a href='/kontejner/{{id}}'>{{name}}</a></h4>
+			<pre class="small">{{code_name}}</pre>
+	    <p class="card-text">{{content}}</p>
+
+		  <div class="card-block">
+				<a href="/kontejner/{{id}}/upravit">upravit</a> | {{> container/delete}}
+			</div>
+
+	  </div>
+	</div>
+{{/kontejner}}
+</div>
