@@ -6,7 +6,7 @@
 --}}
 
 {{#if _id}}
-<a href="#" onclick="confirm('Fakt??') && $.ajax({ url: '/odpadky/{{_id}}', type: 'POST', data: {_method: 'DELETE'}, success: function() { window.location.replace('/odpadky'); }})">smazat</a>
+<a href="#" onclick="confirm('Určitě smazat tenhle odpadek?') && $.ajax({ url: '/odpadky/{{_id}}', type: 'POST', data: {_method: 'DELETE'}, success: function() { window.location.replace('/odpadky'); }})" style="color: red;"><i class="fa fa-trash-o" aria-hidden="true" title="smazat"></i></a>
 {{/if}}
 
 {{!--

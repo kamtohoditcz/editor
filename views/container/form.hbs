@@ -13,12 +13,14 @@
 		Jméno:
 		<input name="name" value="{{name}}" />
 	</p>
+    {{!--
 	<p>
 		Strojové jméno:
     <input name="code_name" value="{{code_name}}" /><br/>
     <small>(url alias, třeba <code>zluty_kontejner</code>)</small>
 		{{! TODO validovat unikátnost }}
 	</p>
+    --}}
 	<p>
 		Popis:
 		<textarea name="content">{{content}}</textarea>
@@ -27,8 +29,10 @@
 		<input type="submit" value="odeslat" />
 		<a href="/kontejner/{{id}}">zrušit</a> |
 		<a href="/kontejner/{{id}}/upravit">obnovit formulář</a> |
-		<a href="/kontejner">seznam kontejneru</a> |
+		<a href="/kontejner">seznam kontejnerů</a> |
+        {{!--
 		<a href="/kategorie">seznam kategorií</a> |
+        --}}
 		<a href="/odpadky">seznam odpadků</a>
 	</p>
 </form>

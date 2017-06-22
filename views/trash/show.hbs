@@ -1,11 +1,12 @@
+<div class="container text-center" style="padding: 40px; background-color: #fafafa">
 {{#if _id}}
   <h1>
-    <span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span>
+    {{!-- <span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span> --}}
     {{name}}
     {{#equals status 'PUBLIC'}}
       <i class="fa fa-check" aria-hidden="true" style="color: #3BB053;"></i>
     {{else}}
-      <i class="fa fa-pencil-square-o" aria-hidden="true" style="color: grey;"></i>
+      <sup style="color: grey; font-size: small;">DRAFT</sup>
     {{/equals}}
   </h1>
 
@@ -16,7 +17,9 @@ vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{
 </p>
 
 {{#if imagePath}}
-  <img src="{{imagePath}}" />
+  <a href="/odpadky/{{_id}}/nahraj-obrazek" title="nahrát obrázek"><img src="{{imagePath}}" /></a>
+{{else}}
+  <a href="/odpadky/{{_id}}/nahraj-obrazek" title="nahrát obrázek"><i class="fa fa-picture-o fa-5x" aria-hidden="true"></i></a>
 {{/if}}
 
 {{#if description}}
@@ -33,13 +36,15 @@ vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{
 <p>Žádná poznámka</p>
 {{/if}}
 
-<p>
-	<a href="/odpadky/{{_id}}/upravit">upravit</a> |
-	<a href="/odpadky/{{_id}}/nahraj-obrazek">nahraj obrázek</a> |
-	<a href="/odpadky">seznam odpadků</a> |
+<h4>
+    <a href="/odpadky/{{_id}}/upravit"><i class="fa fa-pencil-square-o" aria-hidden="true" title="upravit"></i></a>
+    <a href="/odpadky/{{_id}}/nahraj-obrazek"><i class="fa fa-picture-o" aria-hidden="true" title="nahrát obrázek"></i></a>
 	{{> trash/delete}}
-</p>
+    <br/>
+	<a href="/odpadky">seznam odpadků</a>
+</h4>
 
 {{else}}
 Tento odpadek neexistuje.
 {{/if}}
+</div>

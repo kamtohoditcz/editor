@@ -1,3 +1,4 @@
+<div class="container text-center" style="padding: 40px; background-color: #fafafa">
 <h1>{{name}}</h1>
 <div id="image-uploader" style="widht: 100%;">
   <input id="fileupload" type="file" name="image" data-url="/odpadky/{{_id}}/nahraj-obrazek" style="display: none;">
@@ -8,12 +9,15 @@
 </div>
 
 <blockquote>
-Nahrávadlo funguje do <b>4MB</b>. Po nahrání se obrázek zmenší na velikost 500x500px kolem části s největší entropií ;)
+Nahrávadlo funguje do <b>10MB</b>. Po nahrání se obrázek zmenší na velikost 500x500px kolem části s největší entropií ;)
 </blockquote>
 
 <a href="/odpadky/{{_id}}"> zpět na odpadek </a>
 | <a href="/odpadky/{{_id}}/upravit"> upravit odpadek </a>
-| <a href="/odpadky"> seznam odpadků </a>
+| <a href="/odpadky"> zpět na seznam odpadků </a>
+</div>
+
+
 
 <script src="/js/vendor/jquery.ui.widget.js"></script>
 <script src="/js/jquery.iframe-transport.js"></script>
@@ -147,4 +151,3 @@ $(function () {
   });
 });
 </script>
-
