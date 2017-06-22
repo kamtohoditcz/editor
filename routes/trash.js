@@ -5,7 +5,7 @@ const settings = require('../settings');
 var express = require('express');
 var router = express.Router();
 var moment = require('moment');
-// var sharp = require('sharp');
+var sharp = require('sharp');
 var fs = require('fs-extra');
 
 
@@ -115,23 +115,23 @@ function uploadImage(req, res, next) {
   });
 
   // Store cropped
-  // sharp(fileObj.file)
-  //   .resize(500, 500)
-  //   .crop(sharp.strategy.entropy)
-  //   .on('error', function (err) {
-  //     //console.log('ERROR: Failed to convert with err:', {err, fileObj});
-  //     throw err;
-  //   })
-  //   .toFile(destPath)
-  //   .then(() => {
-  //     req.file = Object.assign({}, fileObj, {
-  //       path: resPath,
-  //     });
-  //     next();
-  //   })
-  //   .catch((err) => {
-  //     next(err);
-  //   });
+  sharp(fileObj.file)
+    .resize(500, 500)
+    .crop(sharp.strategy.entropy)
+    .on('error', function (err) {
+      //console.log('ERROR: Failed to convert with err:', {err, fileObj});
+      throw err;
+    })
+    .toFile(destPath)
+    .then(() => {
+      req.file = Object.assign({}, fileObj, {
+        path: resPath,
+      });
+      next();
+    })
+    .catch((err) => {
+      next(err);
+    });
 }
 
 // upload-image - post
