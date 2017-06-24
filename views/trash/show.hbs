@@ -1,3 +1,14 @@
+<style>
+.mdtext {
+  max-width: 500px;
+  /*margin-left: -250px;
+  left: 50%;*/
+  margin: auto;
+  position: relative;
+}
+</style>
+
+
 <div class="container text-center" style="padding: 40px; background-color: #fafafa">
 {{#if _id}}
   <h1>
@@ -10,39 +21,47 @@
     {{/equals}}
   </h1>
 
+
 <p>
 {{#if aliases}} Nebo také: {{aliases}} | {{/if}}
 vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{{/if}}
 | naposledy upraven {{last_edit_date}} {{#if last_edit_user}} uživatelem {{last_edit_user}} {{/if}}
 </p>
 
+
 {{#if imagePath}}
-  <a href="/odpadky/{{_id}}/nahraj-obrazek" title="nahrát obrázek"><img src="{{imagePath}}" /></a>
+  <a href="/odpadky/{{_id}}/nahraj-obrazek" title="nahrát obrázek"><img class="col-12" src="{{imagePath}}" style="padding: 0; max-width: 500px;" /></a>
 {{else}}
   <a href="/odpadky/{{_id}}/nahraj-obrazek" title="nahrát obrázek"><i class="fa fa-picture-o fa-5x" aria-hidden="true"></i></a>
 {{/if}}
 
+
 {{#if description}}
-<h2> POPIS </h2>
-<p>{{description}}</p>
+  <div class="mdtext text-left">
+    {{!-- <h2> POPIS </h2> --}}
+    {{{description}}}
+  </div>
 {{else}}
-<p>Žádný popis</p>
+  <p style="color: grey">Žádný popis</p>
 {{/if}}
+
+<hr/>
+
 
 {{#if note}}
-<h2> POZNÁMKA </h2>
-<p>{{note}}</p>
-{{else}}
-<p>Žádná poznámka</p>
+  <div class="mdtext text-left">
+    {{!-- <i class="fa fa-sticky-note fa-rotate-180 pull-left" aria-hidden="true" style="color: #00C800;"></i> --}}
+    {{{note}}}
+  </div>
+  <hr/>
 {{/if}}
 
-<h4>
-    <a href="/odpadky/{{_id}}/upravit"><i class="fa fa-pencil-square-o" aria-hidden="true" title="upravit"></i></a>
-    <a href="/odpadky/{{_id}}/nahraj-obrazek"><i class="fa fa-picture-o" aria-hidden="true" title="nahrát obrázek"></i></a>
-	{{> trash/delete}}
-    <br/>
-	<a href="/odpadky">seznam odpadků</a>
-</h4>
+
+<h2>
+    <a href="/odpadky/{{_id}}/upravit"><i class="fa fa-pencil-square-o" aria-hidden="true" title="upravit"></i></a> &nbsp;
+    <a href="/odpadky/{{_id}}/nahraj-obrazek"><i class="fa fa-picture-o" aria-hidden="true" title="nahrát obrázek"></i></a> &nbsp;
+	  {{> trash/delete}} &nbsp; &nbsp; <a href="/odpadky">seznam&nbsp;odpadků</a>
+</h2>
 
 {{else}}
 Tento odpadek neexistuje.

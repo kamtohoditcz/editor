@@ -7,7 +7,20 @@ var router = express.Router();
 var moment = require('moment');
 var sharp = require('sharp');
 var fs = require('fs-extra');
+var marked = require('marked');
+var _ = require('lodash');
 
+function mdnify(obj, items ) {
+  for (var item of items) {
+    if (typeof obj[item] === 'undefined') continue;
+    obj[item] = marked(obj[item]);
+  }
+  return obj;
+}
+
+function mdnifyEach(arr, items) {
+  return arr.map((a) => mdnify(a, items));
+}
 
 var vyblejChybu = function (res) {
   return function (err) {
@@ -164,9 +177,9 @@ router.get('/', function (req, res) {
     if (t === 'json') {
       res.json(odpadky);
     } else {
-      res.render('trash/list', {
-        odpadky: odpadky
-      });
+      res.render('trash/list', ({
+        odpadky: mdnifyEach(odpadky, ['description', 'note']),
+      }));
     }
   }).catch(vyblejChybu(res));
 });
@@ -195,7 +208,7 @@ router.get('/:id', function (req, res) {
         // TODO show some "do you want to create message?"
         res.redirect('/odpadky');
       } else {
-        res.render('trash/show', convertDates(odpadek));
+        res.render('trash/show', mdnify(convertDates(odpadek), ['description', 'note']));
       }
     })
     .catch(vyblejChybu(res));

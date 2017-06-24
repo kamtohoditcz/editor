@@ -32,6 +32,7 @@
     "fs-extra": "^3.0.1",
     "hbs": "^4.0.1",
     "lodash": "^4.17.4",
+    "marked": "^0.3.6",
     "method-override": "^2.3.9",
     "moment": "^2.18.1",
     "mongodb": "^2.2.29",
