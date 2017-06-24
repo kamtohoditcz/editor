@@ -1,3 +1,76 @@
+<script> $(function() {
+  var $ideas = $('.js-ideas');
+  var $value = $('.js-ideas-value');
+  var $result = $('.js-ideas-result');
+  var T_30SEC = 30000;
+  var T_3SEC = 3000;
+
+  var ideasXhr;
+  $value.autoComplete({
+      minChars: 0,
+      delay: 300,
+      source: function(term, response){
+        console.log({term});
+        try { ideasXhr.abort(); } catch(e){}
+        ideasXhr = $.getJSON('/odpadky', { t: 'json', q: term }, function(data){ response(data); });
+      },
+      renderItem: function(item, search) {
+        console.log({item, search});
+        var name = item.name;
+        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+        return '<div class="autocomplete-suggestion" data-val="' + name + '" data-trash-id="' + item._id + '">' + name.replace(re, "<b>$1</b>") + '</div>';
+      },
+      onSelect: function(event, term, item) {
+        var id = item.data('trash-id');
+        event.preventDefault();
+        location.href = '/odpadky/' + id;
+      },
+  });
+
+  $ideas.submit(function(e) {
+    var value = $value.val();
+    $.ajax({
+      method: 'PUT',
+      url: '/odpadky/napady',
+      data: { name: value },
+      success: function(data) {
+        alertGood('Odpadek vytvořen ;-) <a href="/odpadky/' + data.id + '">' + value + '</a>');
+      },
+      error: function(data) {
+        alertBaad('Něco se ošklivým způsobem nepovedlo :-(');
+      },
+    });
+    e.preventDefault();
+    return false;
+  });
+
+  function alertGood(text) {
+      var $alert = $('<div class="alert alert-success" role="alert">' + text + '</div>').prependTo($result);
+      setTimeout(function(){ $alert.hide('slow').remove(); }, T_30SEC);
+  };
+
+  function alertBaad(text) {
+      var $alert = $('<div class="alert alert-danger" role="alert">' + text + '</div>').prependTo($result);
+      setTimeout(function(){ $alert.hide('slow').remove(); }, T_3SEC);
+  };
+});
+</script>
+
+<section class="container text-center">
+  <form class="js-ideas form-inline text-center">
+    <div class="row" style="width: 95%;">
+      <input class="js-ideas-value form-control col-10" type="text"/>
+      <button class="btn col-2" type="submit">Vytvořit</button>
+    </div>
+  </form>
+  <div class="js-ideas-result"></div>
+</section>
+
+<!--  -->
+<!--  -->
+<!--  -->
+
 <style>
 .image {
   background-position: center;
