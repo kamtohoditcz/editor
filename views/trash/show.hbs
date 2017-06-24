@@ -26,6 +26,12 @@
 {{#if aliases}} Nebo také: {{aliases}} | {{/if}}
 vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{{/if}}
 | naposledy upraven {{last_edit_date}} {{#if last_edit_user}} uživatelem {{last_edit_user}} {{/if}}
+{{#if occurence}}
+  | výskyt:
+  {{#equals occurence 'CLICHE'}}KLIŠÉ{{/equals}}
+  {{#equals occurence 'NORMAL'}}TAK NORMÁL{{/equals}}
+  {{#equals occurence 'RARE'}}ŘÍDCE{{/equals}}
+{{/if}}
 </p>
 
 

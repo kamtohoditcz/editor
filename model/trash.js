@@ -7,13 +7,18 @@ var collectionName = 'trash';
 
 var buildQuery = require('./search-query-builder');
 
+function sortByOccurence(trash) {
+  if(!trash.occurence) return 2;
+  return {'CLICHE': 1, 'NORMAL': 2, 'RARE': 3}[trash.occurence];
+}
+
 module.exports = mytrash = {
   listAll: function (text) {
     console.log('MONGO: Calling mongo.listAll');
     if (text) {
       return mytrash.findText(collectionName, text);
     } else {
-      return mongo.listAll(collectionName);
+      return mongo.listAll(collectionName).then((arr) => _.sortBy(arr, [sortByOccurence, 'last_edit_date']));
     }
   },
 

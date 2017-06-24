@@ -14,8 +14,9 @@
   <div class="form-group">
     <label for="name"> JMÉNO: </label>
     <input type="input" id="name" name="name" class="form-control" placeholder="například: krabice od pizzy" value="{{name}}" />
-    <small id="nameHelp" class="form-text text-muted pull-right">Co nejvýstižnějsí jméno pro odpadek. </small>
+    <small id="nameHelp" class="form-text text-muted pull-right"> Co nejvýstižnějsí jméno pro odpadek. </small>
   </div>
+
   {{!--
   <div class="form-group">
     <label for="url-name"> URL JMÉNO: </label>
@@ -23,14 +24,7 @@
     <small id="nameHelp" class="form-text text-muted">URL odpadku</small>
   </div>
   --}}
-  <div class="form-group">
-    <label for="status"> STATUS: </label>
-    <select id="status" name="status" class="form-control" value="{{status}}">
-      <option value="DRAFT" {{#equals status 'DRAFT'}}selected{{/equals}}>DRAFT</option>
-      <option value="PUBLIC" {{#equals status 'PUBLIC'}}selected{{/equals}}>PUBLIC</option>
-    </select>
-    <small id="statusHelp" class="form-text text-muted pull-right">DRAFT ještě nehotový. PUBLIC může ven. </small>
-  </div>
+
   <div class="form-group">
     <label for="aliases"> ALIAS: </label>
     <input type="input" id="aliases" name="aliases" class="form-control" placeholder="například: pizzabox krabica na picu" value="{{aliases}}" />
@@ -43,6 +37,26 @@
         už tenhle výraz nenajdu.
     </small>
   </div>
+
+  <div class="form-group">
+    <label for="status"> STATUS: </label>
+    <select id="status" name="status" class="form-control" value="{{status}}">
+      <option value="DRAFT" {{#equals status 'DRAFT'}}selected{{/equals}}>DRAFT</option>
+      <option value="PUBLIC" {{#equals status 'PUBLIC'}}selected{{/equals}}>PUBLIC</option>
+    </select>
+    <small id="statusHelp" class="form-text text-muted pull-right"> DRAFT ještě nehotový. PUBLIC může ven. </small>
+  </div>
+
+  <div class="form-group">
+    <label for="occurence"> VÝSKYT: </label>
+    <select id="occurence" name="occurence" class="form-control" value="{{occurence}}">
+      <option value="CLICHE" {{#equals occurence 'CLICHE'}}selected{{/equals}}>KLIŠÉ</option>
+      <option value="NORMAL" {{#equals occurence 'NORMAL'}}selected{{/equals}}{{#occurence}}{{else}}selected{{/occurence}}>TAK NORMÁL</option>
+      <option value="RARE" {{#equals occurence 'RARE'}}selected{{/equals}}>ŘÍDCE</option>
+    </select>
+    <small id="occurenceHelp" class="form-text text-muted pull-right"> Jak často to budou asi lidi hledat ;) </small>
+  </div>
+
   {{!--
   <div class="form-group"> <label for="category"> KATEGORIE: </label>
     <input type="input" id="category" name="category" class="form-control" placeholder="například: papír/znečištěný" value="{{category}}" />
@@ -92,4 +106,3 @@
 
 });
 </script>
-
