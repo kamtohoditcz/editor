@@ -2,7 +2,7 @@
 
 <div class="row">
   <a href="#" class="btn btn-success mr-auto" onclick="$(this).closest('form').submit()"> uložit změny </a>
-  <a href="/odpadky" class="btn btn-outline-warning"> zpět na seznam odpadků (zahodí neuložené změny!) </a>
+  <a href="/odpadky{{#if _id}}#{{_id}}{{/if}}" class="btn btn-outline-warning"> zpět na seznam odpadků (zahodí neuložené změny!) </a>
   <div>&nbsp;</div>
   <div class="btn btn-outline-secondary"> {{#if _id}} {{> trash/delete}}{{/if}} </div>
 </div> {{!-- .row --}}
@@ -182,7 +182,7 @@
 
   <div class="row">
     <a href="#" class="btn btn-success mr-auto" onclick="$(this).closest('form').submit()"> uložit změny </a>
-    <a href="/odpadky" class="btn btn-outline-warning"> zpět na seznam odpadků (zahodí neuložené změny!) </a>
+    <a href="/odpadky{{#if _id}}#{{_id}}{{/if}}" class="btn btn-outline-warning"> zpět na seznam odpadků (zahodí neuložené změny!) </a>
     <div>&nbsp;</div>
     <div class="btn btn-outline-secondary"> {{#if _id}} {{> trash/delete}}{{/if}} </div>
   </div> {{!-- .row --}}
