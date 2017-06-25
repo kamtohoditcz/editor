@@ -8,8 +8,8 @@ var collectionName = 'trash';
 var buildQuery = require('./search-query-builder');
 
 function sortByOccurence(trash) {
-  if(!trash.occurence) return 2;
-  return {'CLICHE': 1, 'NORMAL': 2, 'RARE': 3}[trash.occurence];
+  if (!trash.occurence) return 2;
+  return { 'CLICHE': 3, 'NORMAL': 2, 'RARE': 1 }[trash.occurence];
 }
 
 module.exports = mytrash = {
@@ -18,7 +18,7 @@ module.exports = mytrash = {
     if (text) {
       return mytrash.findText(collectionName, text);
     } else {
-      return mongo.listAll(collectionName).then((arr) => _.sortBy(arr, [sortByOccurence, 'last_edit_date']));
+      return mongo.listAll(collectionName).then((arr) => _.sortBy(arr, [sortByOccurence, 'last_edit_date']).reverse());
     }
   },
 
