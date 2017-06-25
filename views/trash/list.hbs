@@ -115,15 +115,20 @@
 {{#odpadky}}
   <div class="card col-xs-12 col-md-6 col-lg-4">
   <div class="kth-card">
-    {{#if imagePath}}
     <a href='/odpadky/{{_id}}'>
-      <div class="image" style="background-image: url({{imagePath}});"></div>
+      {{#if imagePath}}
+        <div class="image" style="background-image: url({{imagePath}});"></div>
+      {{else}}
+        <div class="image" style="background-image: url(/img/noimg.png);"></div>
+      {{/if}}
     </a>
-    {{else}}
-      <div class="image"></div>
+    {{#if symbol}}
+      <div class="pull-right">
+        <i class="fa fa-recycle"></i>&nbsp;{{symbol}}
+      </div>
     {{/if}}
-    <div class="card-block text-center">
-      <h4 class="card-title">
+    <div class="card-block text-center" style="padding: 1.25rem 0;">
+      <h2 class="card-title">
         {{!--<span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span>--}}
         <a href='/odpadky/{{_id}}'>{{name}}</a>
         {{#equals status 'PUBLIC'}}
@@ -131,11 +136,12 @@
         {{else}}
           <sup style="color: grey; font-size: small;">DRAFT</sup>
         {{/equals}}
-        <br/>
+      </h2>
+      <div class="fa-3x">
         <a href="/odpadky/{{_id}}/upravit"><i class="fa fa-pencil-square-o" aria-hidden="true" title="upravit"></i></a>
         <a href="/odpadky/{{_id}}/nahraj-obrazek"><i class="fa fa-picture-o" aria-hidden="true" title="nahrát obrázek"></i></a>
         {{> trash/delete}}
-      </h4>
+      </div>
       <p class="card-text">{{{description}}}</p>
     </div>
   </div>
