@@ -1,9 +1,34 @@
 <div class="container" style="padding: 40px; background-color: #fafafa">
+
+<div class="row">
+  <a href="#" class="btn btn-success mr-auto" onclick="$(this).closest('form').submit()"> uložit změny </a>
+  <a href="/odpadky" class="btn btn-outline-warning"> zpět na seznam odpadků (zahodí neuložené změny!) </a>
+  <div>&nbsp;</div>
+  <div class="btn btn-outline-secondary"> {{#if _id}} {{> trash/delete}}{{/if}} </div>
+</div> {{!-- .row --}}
+<div class="row">
+  <div>&nbsp;</div>
+</div> {{!-- .row --}}
+
+<div class="text-center">
 {{#if _id}}
-<h1>Upraujeme "{{name}}"</h1>
+  <h1>Upraujeme "{{name}}"</h1>
 {{else}}
-<h1>Nový odpadek</h1>
+  <h1>Nový odpadek</h1>
 {{/if}}
+</div>
+
+<div class="pull-right">
+{{#if imagePath}}
+  <a href="/odpadky/{{_id}}/nahraj-obrazek" title="nahrát obrázek"><img class="col" src="{{imagePath}}" style="padding: 0; max-width: 200px;" /></a>
+{{else}}
+  {{#if _id}}
+    <a href="/odpadky/{{_id}}/nahraj-obrazek" title="nahrát obrázek"><img class="col" src="/img/noimg.png" style="padding: 0; max-width: 200px;" /></a>
+  {{else}}
+    Nejprve odpadek uložte.
+  {{/if}}
+{{/if}}
+</div>
 
 {{#if _id}}
 <form action="/odpadky/{{_id}}" method="post" enctype="application/x-www-form-urlencoded">
@@ -11,11 +36,6 @@
 <form action="/odpadky" method="post" enctype="application/x-www-form-urlencoded">
   <input type="hidden" value="PUT" name="_method" />
 {{/if}}
-  <div class="form-group">
-    <label for="name"> JMÉNO: </label>
-    <input type="input" id="name" name="name" class="form-control" placeholder="například: krabice od pizzy" value="{{name}}" />
-    <small id="nameHelp" class="form-text text-muted pull-right"> Co nejvýstižnějsí jméno pro odpadek. </small>
-  </div>
 
   {{!--
   <div class="form-group">
@@ -25,133 +45,148 @@
   </div>
   --}}
 
-  <div class="form-group">
-    <label for="aliases"> ALIAS: </label>
-    <input type="input" id="aliases" name="aliases" class="form-control" placeholder="například: pizzabox krabica na picu" value="{{aliases}}" />
-    <small id="aliasesHelp" class="form-text text-muted pull-right">
-        Doplňkový <i>vyhledávací výraz</i> pro tentýž odpadek. Nemusí jako
-        celek dávat smysl. Uživatel ho neuvidí.  Slova ve výrazu by ale měla
-        být v pořadí, v jakém je uživatel bude zadávat při hledání.  <br/>
-        Například <i>"kočičí miska pro kočku"</i> je zároveň <i>"kočičí miska"</i>
-        a <i>"miska pro kočku"</i>, ale když budu hledat <i>"miska kočičí"</i> tak
-        už tenhle výraz nenajdu.
-    </small>
-  </div>
+  <div class="row">
 
-  <div class="form-group">
-    <label for="status"> STATUS: </label>
-    <select id="status" name="status" class="form-control" value="{{status}}">
-      <option value="DRAFT" {{#equals status 'DRAFT'}}selected{{/equals}}>DRAFT</option>
-      <option value="PUBLIC" {{#equals status 'PUBLIC'}}selected{{/equals}}>PUBLIC</option>
-    </select>
-    <small id="statusHelp" class="form-text text-muted pull-right"> DRAFT ještě nehotový. PUBLIC může ven. </small>
-  </div>
+    <div class="col-lg-4">
+      <label for="name"> JMÉNO: </label>
+      <input type="input" id="name" name="name" class="form-control" placeholder="například: krabice od pizzy" value="{{name}}" />
+      <small id="nameHelp" class="form-text text-muted pull-right"> Co nejvýstižnějsí jméno pro odpadek. </small>
+    </div>
 
-  <div class="form-group">
-    <label for="occurence"> VÝSKYT: </label>
-    <select id="occurence" name="occurence" class="form-control" value="{{occurence}}">
-      <option value="CLICHE" {{#equals occurence 'CLICHE'}}selected{{/equals}}>KLIŠÉ</option>
-      <option value="NORMAL" {{#equals occurence 'NORMAL'}}selected{{/equals}}{{#occurence}}{{else}}selected{{/occurence}}>TAK NORMÁL</option>
-      <option value="RARE" {{#equals occurence 'RARE'}}selected{{/equals}}>ŘÍDCE</option>
-    </select>
-    <small id="occurenceHelp" class="form-text text-muted pull-right"> Jak často to budou asi lidi hledat ;) </small>
-  </div>
+    <div class="col-lg-8">
+      <label for="aliases"> ALIAS: </label>
+      <input type="input" id="aliases" name="aliases" class="form-control" placeholder="například: pizzabox krabica na picu" value="{{aliases}}" />
+      <small id="aliasesHelp" class="form-text text-muted pull-right">
+          Nemusí jako celek dávat smysl. Uživatel ho neuvidí. Slova v pořadí, v jakém
+          je uživatel bude zadávat při hledání.  <br/>
+          Například <i>"kočičí miska pro kočku"</i> je zároveň <i>"kočičí miska"</i>
+          a <i>"miska pro kočku"</i>, ale když budu hledat <i>"miska kočičí"</i> tak
+          už tenhle výraz nenajdu.
+      </small>
+    </div>
 
-  <div class="form-group">
-    <label for="symbol"> RECYKLAČNÍ SYMBOL: </label>
-    <select id="symbol" name="symbol" class="form-control" value="{{symbol}}">
-      <optgroup style="background-color: lightgrey; color: darkgrey;">
-        <option value="" {{#equals symbol ''}}selected{{/equals}}>Neznámý</option>
-      </optgroup>
-      <optgroup style="background-color: yellow;">
-        <option value="PLASTIC" {{#equals symbol 'PLASTIC'}}selected{{/equals}}>Prostě plast</option>
-        <option value="01PET"   {{#equals symbol '01PET'}}selected{{/equals}}>01 PET (PETE)</option>
-        <option value="02PE-HD" {{#equals symbol '02PE-HD'}}selected{{/equals}}>02 HDPE (PE-HD)</option>
-        <option value="03PVC"   {{#equals symbol '03PVC'}}selected{{/equals}}>03 PVC (V)</option>
-        <option value="04PE-LD" {{#equals symbol '04PE-LD'}}selected{{/equals}}>04 LDPE (PE-LD)</option>
-        <option value="05PP"    {{#equals symbol '05PP'}}selected{{/equals}}>05 PP</option>
-        <option value="06PS"    {{#equals symbol '06PS'}}selected{{/equals}}>06 PS</option>
-        <option value="07o"     {{#equals symbol '07O'}}selected{{/equals}}>07-19 O (ostatní plasty)</option>
-      </optgroup>
-      <optgroup style="background-color: #8383FF;">
-        <option value="PAPER" {{#equals symbol 'PAPER'}}selected{{/equals}}>Prostě papír</option>
-        <option value="20PAP" {{#equals symbol '20PAP'}}selected{{/equals}}>20 PAP</option>
-        <option value="21PAP" {{#equals symbol '21PAP'}}selected{{/equals}}>21 PAP</option>
-        <option value="22PAP" {{#equals symbol '22PAP'}}selected{{/equals}}>22 PAP</option>
-        <option value="23PAP" {{#equals symbol '23PAP'}}selected{{/equals}}>23-39 PAP (ostatní papír)</option>
-      </optgroup>
-      <optgroup style="background-color: lightgrey;">
-        <option value="METAL" {{#equals symbol 'METAL'}}selected{{/equals}}>Prostě metal</option>
-        <option value="40FE"  {{#equals symbol '40FE'}}selected{{/equals}}>40 FE</option>
-        <option value="41ALU" {{#equals symbol '41ALU'}}selected{{/equals}}>41 ALU</option>
-        <option value="42"    {{#equals symbol '42'}}selected{{/equals}}>42-49 ostatní kovy</option>
-      </optgroup>
-      <optgroup style="background-color: #EC971F;">
-        <option value="WOOD" {{#equals symbol 'WOOD'}}selected{{/equals}}>Prostě dřevo</option>
-        <option value="50FOR" {{#equals symbol '50FOR'}}selected{{/equals}}>50 FOR (dřevo)</option>
-        <option value="51FOR" {{#equals symbol '51FOR'}}selected{{/equals}}>51 FOR (korek)</option>
-        <option value="52FOR" {{#equals symbol '52FOR'}}selected{{/equals}}>52-59 FOR (ostatní dřevo)</option>
-      </optgroup>
-      <optgroup style="background-color: #DACE78;">
-        <option value="TEXTIL" {{#equals symbol 'TEXTIL'}}selected{{/equals}}>Prostě textil</option>
-        <option value="60TEX" {{#equals symbol '60TEX'}}selected{{/equals}}>60 TEX (bavlna)</option>
-        <option value="61TEX" {{#equals symbol '61TEX'}}selected{{/equals}}>61 TEX (pytlovina, juta)</option>
-        <option value="62TEX" {{#equals symbol '62TEX'}}selected{{/equals}}>62-69 TEX (ostatní textil)</option>
-      </optgroup>
-      <optgroup style="background-color: #53CA53;">
-        <option value="GLASS" {{#equals symbol 'GLASS'}}selected{{/equals}}>Prostě sklo</option>
-        <option value="70GL" {{#equals symbol '70GL'}}selected{{/equals}}>70 GL (čiré sklo)</option>
-        <option value="71GL" {{#equals symbol '71GL'}}selected{{/equals}}>71 GL (zelené sklo)</option>
-        <option value="72GL" {{#equals symbol '72GL'}}selected{{/equals}}>72 GL (hnědé sklo)</option>
-        <option value="73GL" {{#equals symbol '73GL'}}selected{{/equals}}>73-79 (ostatní sklo)</option>
-      </optgroup>
-      <optgroup style="background-color: #E673E6;">
-        <option value="COMPOSITE" {{#equals symbol 'COMPOSITE'}}selected{{/equals}}>Prostě kombinovaný</option>
-        <option value="80C/PAP" {{#equals symbol '80C/PAP'}}selected{{/equals}}>80 papír a lepenka + kov</option>
-        <option value="81C/PAP" {{#equals symbol '81C/PAP'}}selected{{/equals}}>81 papír a lepenka + plast</option>
-        <option value="82C/PAP" {{#equals symbol '82C/PAP'}}selected{{/equals}}>82 papír a lepenka + hliník</option>
-        <option value="83C/PAP" {{#equals symbol '83C/PAP'}}selected{{/equals}}>83 papír a lepenka + ocelový pocínovaný plech</option>
-        <option value="84C/PAP" {{#equals symbol '84C/PAP'}}selected{{/equals}}>84 papír a lepenka + plast + hliník</option>
-        <option value="85C/PAP" {{#equals symbol '85C/PAP'}}selected{{/equals}}>85 papír a lepenka + plast + hliník + ocelový pocínovaný plech</option>
-        <option value="86" {{#equals symbol '86'}}selected{{/equals}}>86-89 více materiálů</option>
-        <option value="90" {{#equals symbol '90'}}selected{{/equals}}>90 plast + hliník</option>
-        <option value="91" {{#equals symbol '91'}}selected{{/equals}}>91 plast + ocelový pocínovaný plech</option>
-        <option value="92" {{#equals symbol '92'}}selected{{/equals}}>92 plast + různé kovy</option>
-        <option value="93" {{#equals symbol '93'}}selected{{/equals}}>93,94 další materiály</option>
-        <option value="95" {{#equals symbol '95'}}selected{{/equals}}>95 sklo + plast</option>
-        <option value="96" {{#equals symbol '96'}}selected{{/equals}}>96 sklo + hliník</option>
-        <option value="97" {{#equals symbol '97'}}selected{{/equals}}>97 sklo + ocelový pocínovaný plec</option>
-        <option value="98" {{#equals symbol '98'}}selected{{/equals}}>98 sklo + různé kovy</option>
-        <option value="99" {{#equals symbol '99'}}selected{{/equals}}>99 ostatní materiály</option>
-      </optgroup>
-    </select>
-    <small id="symbolHelp" class="form-text text-muted pull-right"> Číslo v recyklačních šipkách. <i class="fa fa-recycle"></i></small>
-  </div>
+  </div> {{!-- .row --}}
+  <div class="row">
 
-  {{!--
-  <div class="form-group"> <label for="category"> KATEGORIE: </label>
-    <input type="input" id="category" name="category" class="form-control" placeholder="například: papír/znečištěný" value="{{category}}" />
-    <small id="categoryHelp" class="form-text text-muted pull-right">Lomítkem oddělená kategorie. Zatím zadáváme intuitivně co kam zapadá. Našeptávač by měl poradit ;) Když nevíte, nechte prázdnou. </small>
-  </div>
-  --}}
-  <div class="form-group">
-    <label for="description"> POPIS: </label>
-    <textarea id="description" name="description" class="form-control">{{description}}</textarea>
-    <small id="descriptionHelp" class="form-text text-muted pull-right">Dodatečný popis k odpadku. Sem se píše na co jsme přišli.
-      Prvních 160 znaků bude zobrazeno v seznamech odpadků, zbytek až na stránce detailu. </small>
-  </div>
-  <div class="form-group">
-    <label for="note"> POZNÁMKA: </label>
-    <textarea id="note" name="note" class="form-control">{{note}}</textarea>
-    <small id="noteHelp" class="form-text text-muted pull-right">Pouze pro výzkum, nebude zobrazena na webu. </small>
-  </div>
-  <div>
-    <a href="#" class="btn btn-sm btn-success" onclick="$(this).closest('form').submit()"> uložit změny </a>
-    | <a href="/odpadky/{{_id}}"> zrušit úpravy </a>
-    | <a href="/odpadky/{{_id}}/upravit"> obnovit formulář </a>
-    | <a href="/odpadky"> zpět na seznam odpadků </a>
-    {{#if _id}}| {{> trash/delete}}{{/if}}
-  </div>
+    <div class="col-lg-4">
+      <label for="status"> STATUS: </label>
+      <select id="status" name="status" class="form-control" value="{{status}}">
+        <option value="DRAFT" {{#equals status 'DRAFT'}}selected{{/equals}}>DRAFT</option>
+        <option value="PUBLIC" {{#equals status 'PUBLIC'}}selected{{/equals}}>PUBLIC</option>
+      </select>
+      <small id="statusHelp" class="form-text text-muted pull-right"> DRAFT ještě nehotový. PUBLIC může ven. </small>
+    </div>
+
+    <div class="col-lg-4">
+      <label for="occurence"> VÝSKYT: </label>
+      <select id="occurence" name="occurence" class="form-control" value="{{occurence}}">
+        <option value="CLICHE" {{#equals occurence 'CLICHE'}}selected{{/equals}}>KLIŠÉ</option>
+        <option value="NORMAL" {{#equals occurence 'NORMAL'}}selected{{/equals}}{{#occurence}}{{else}}selected{{/occurence}}>TAK NORMÁL</option>
+        <option value="RARE" {{#equals occurence 'RARE'}}selected{{/equals}}>ŘÍDCE</option>
+      </select>
+      <small id="occurenceHelp" class="form-text text-muted pull-right"> Jak často to budou asi lidi hledat ;) </small>
+    </div>
+
+    <div class="col-lg-4">
+      <label for="symbol"> RECYKLAČNÍ SYMBOL: </label>
+      <select id="symbol" name="symbol" class="form-control" value="{{symbol}}">
+        <optgroup style="background-color: lightgrey; color: darkgrey;">
+          <option value="" {{#equals symbol ''}}selected{{/equals}}>Neznámý</option>
+        </optgroup>
+        <optgroup style="background-color: yellow;">
+          <option value="PLASTIC" {{#equals symbol 'PLASTIC'}}selected{{/equals}}>Prostě plast</option>
+          <option value="01PET"   {{#equals symbol '01PET'}}selected{{/equals}}>01 PET (PETE)</option>
+          <option value="02PE-HD" {{#equals symbol '02PE-HD'}}selected{{/equals}}>02 HDPE (PE-HD)</option>
+          <option value="03PVC"   {{#equals symbol '03PVC'}}selected{{/equals}}>03 PVC (V)</option>
+          <option value="04PE-LD" {{#equals symbol '04PE-LD'}}selected{{/equals}}>04 LDPE (PE-LD)</option>
+          <option value="05PP"    {{#equals symbol '05PP'}}selected{{/equals}}>05 PP</option>
+          <option value="06PS"    {{#equals symbol '06PS'}}selected{{/equals}}>06 PS</option>
+          <option value="07o"     {{#equals symbol '07O'}}selected{{/equals}}>07-19 O (ostatní plasty)</option>
+        </optgroup>
+        <optgroup style="background-color: #8383FF;">
+          <option value="PAPER" {{#equals symbol 'PAPER'}}selected{{/equals}}>Prostě papír</option>
+          <option value="20PAP" {{#equals symbol '20PAP'}}selected{{/equals}}>20 PAP</option>
+          <option value="21PAP" {{#equals symbol '21PAP'}}selected{{/equals}}>21 PAP</option>
+          <option value="22PAP" {{#equals symbol '22PAP'}}selected{{/equals}}>22 PAP</option>
+          <option value="23PAP" {{#equals symbol '23PAP'}}selected{{/equals}}>23-39 PAP (ostatní papír)</option>
+        </optgroup>
+        <optgroup style="background-color: lightgrey;">
+          <option value="METAL" {{#equals symbol 'METAL'}}selected{{/equals}}>Prostě metal</option>
+          <option value="40FE"  {{#equals symbol '40FE'}}selected{{/equals}}>40 FE</option>
+          <option value="41ALU" {{#equals symbol '41ALU'}}selected{{/equals}}>41 ALU</option>
+          <option value="42"    {{#equals symbol '42'}}selected{{/equals}}>42-49 ostatní kovy</option>
+        </optgroup>
+        <optgroup style="background-color: #EC971F;">
+          <option value="WOOD" {{#equals symbol 'WOOD'}}selected{{/equals}}>Prostě dřevo</option>
+          <option value="50FOR" {{#equals symbol '50FOR'}}selected{{/equals}}>50 FOR (dřevo)</option>
+          <option value="51FOR" {{#equals symbol '51FOR'}}selected{{/equals}}>51 FOR (korek)</option>
+          <option value="52FOR" {{#equals symbol '52FOR'}}selected{{/equals}}>52-59 FOR (ostatní dřevo)</option>
+        </optgroup>
+        <optgroup style="background-color: #DACE78;">
+          <option value="TEXTIL" {{#equals symbol 'TEXTIL'}}selected{{/equals}}>Prostě textil</option>
+          <option value="60TEX" {{#equals symbol '60TEX'}}selected{{/equals}}>60 TEX (bavlna)</option>
+          <option value="61TEX" {{#equals symbol '61TEX'}}selected{{/equals}}>61 TEX (pytlovina, juta)</option>
+          <option value="62TEX" {{#equals symbol '62TEX'}}selected{{/equals}}>62-69 TEX (ostatní textil)</option>
+        </optgroup>
+        <optgroup style="background-color: #53CA53;">
+          <option value="GLASS" {{#equals symbol 'GLASS'}}selected{{/equals}}>Prostě sklo</option>
+          <option value="70GL" {{#equals symbol '70GL'}}selected{{/equals}}>70 GL (čiré sklo)</option>
+          <option value="71GL" {{#equals symbol '71GL'}}selected{{/equals}}>71 GL (zelené sklo)</option>
+          <option value="72GL" {{#equals symbol '72GL'}}selected{{/equals}}>72 GL (hnědé sklo)</option>
+          <option value="73GL" {{#equals symbol '73GL'}}selected{{/equals}}>73-79 (ostatní sklo)</option>
+        </optgroup>
+        <optgroup style="background-color: #E673E6;">
+          <option value="COMPOSITE" {{#equals symbol 'COMPOSITE'}}selected{{/equals}}>Prostě kombinovaný</option>
+          <option value="80C/PAP" {{#equals symbol '80C/PAP'}}selected{{/equals}}>80 papír a lepenka + kov</option>
+          <option value="81C/PAP" {{#equals symbol '81C/PAP'}}selected{{/equals}}>81 papír a lepenka + plast</option>
+          <option value="82C/PAP" {{#equals symbol '82C/PAP'}}selected{{/equals}}>82 papír a lepenka + hliník</option>
+          <option value="83C/PAP" {{#equals symbol '83C/PAP'}}selected{{/equals}}>83 papír a lepenka + ocelový pocínovaný plech</option>
+          <option value="84C/PAP" {{#equals symbol '84C/PAP'}}selected{{/equals}}>84 papír a lepenka + plast + hliník</option>
+          <option value="85C/PAP" {{#equals symbol '85C/PAP'}}selected{{/equals}}>85 papír a lepenka + plast + hliník + ocelový pocínovaný plech</option>
+          <option value="86" {{#equals symbol '86'}}selected{{/equals}}>86-89 více materiálů</option>
+          <option value="90" {{#equals symbol '90'}}selected{{/equals}}>90 plast + hliník</option>
+          <option value="91" {{#equals symbol '91'}}selected{{/equals}}>91 plast + ocelový pocínovaný plech</option>
+          <option value="92" {{#equals symbol '92'}}selected{{/equals}}>92 plast + různé kovy</option>
+          <option value="93" {{#equals symbol '93'}}selected{{/equals}}>93,94 další materiály</option>
+          <option value="95" {{#equals symbol '95'}}selected{{/equals}}>95 sklo + plast</option>
+          <option value="96" {{#equals symbol '96'}}selected{{/equals}}>96 sklo + hliník</option>
+          <option value="97" {{#equals symbol '97'}}selected{{/equals}}>97 sklo + ocelový pocínovaný plec</option>
+          <option value="98" {{#equals symbol '98'}}selected{{/equals}}>98 sklo + různé kovy</option>
+          <option value="99" {{#equals symbol '99'}}selected{{/equals}}>99 ostatní materiály</option>
+        </optgroup>
+      </select>
+      <small id="symbolHelp" class="form-text text-muted pull-right"> Číslo v recyklačních šipkách. <i class="fa fa-recycle"></i></small>
+    </div>
+
+  </div> {{!-- .row --}}
+  <div class="row">
+
+    {{!--
+    <div class="form-group"> <label for="category"> KATEGORIE: </label>
+      <input type="input" id="category" name="category" class="form-control" placeholder="například: papír/znečištěný" value="{{category}}" />
+      <small id="categoryHelp" class="form-text text-muted pull-right">Lomítkem oddělená kategorie. Zatím zadáváme intuitivně co kam zapadá. Našeptávač by měl poradit ;) Když nevíte, nechte prázdnou. </small>
+    </div>
+    --}}
+    <div class="col-lg-6">
+      <label for="description"> POPIS: </label>
+      <textarea id="description" name="description" class="form-control">{{description}}</textarea>
+      <small id="descriptionHelp" class="form-text text-muted pull-right">Dodatečný popis k odpadku. Sem se píše na co jsme přišli.
+        Prvních 160 znaků bude zobrazeno v seznamech odpadků, zbytek až na stránce detailu. </small>
+    </div>
+    <div class="col-lg-6">
+      <label for="note"> POZNÁMKA: </label>
+      <textarea id="note" name="note" class="form-control">{{note}}</textarea>
+      <small id="noteHelp" class="form-text text-muted pull-right">Pouze pro výzkum, nebude zobrazena na webu. </small>
+    </div>
+  </div> {{!-- .row --}}
+
+  <div class="row">
+    <a href="#" class="btn btn-success mr-auto" onclick="$(this).closest('form').submit()"> uložit změny </a>
+    <a href="/odpadky" class="btn btn-outline-warning"> zpět na seznam odpadků (zahodí neuložené změny!) </a>
+    <div>&nbsp;</div>
+    <div class="btn btn-outline-secondary"> {{#if _id}} {{> trash/delete}}{{/if}} </div>
+  </div> {{!-- .row --}}
+
 </form>
 </div>
 

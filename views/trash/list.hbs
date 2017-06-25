@@ -22,9 +22,8 @@
         return '<div class="autocomplete-suggestion" data-val="' + name + '" data-trash-id="' + item._id + '">' + name.replace(re, "<b>$1</b>") + '</div>';
       },
       onSelect: function(event, term, item) {
-        var id = item.data('trash-id');
         event.preventDefault();
-        location.href = '/odpadky/' + id;
+        location.href = '/odpadky/' + item.data('trash-id');
       },
   });
 
@@ -35,7 +34,8 @@
       url: '/odpadky/napady',
       data: { name: value },
       success: function(data) {
-        alertGood('Odpadek vytvořen ;-) <a href="/odpadky/' + data.id + '">' + value + '</a>');
+        location.href = '/odpadky/' + data.id + '/upravit';
+        // alertGood('Odpadek vytvořen ;-) <a href="/odpadky/' + data.id + '">' + value + '</a>');
       },
       error: function(data) {
         alertBaad('Něco se ošklivým způsobem nepovedlo :-(');
@@ -114,44 +114,40 @@
   </div>
 {{#odpadky}}
   <div class="card col-xs-12 col-md-6 col-lg-4">
-  <div class="kth-card">
-    <a href='/odpadky/{{_id}}'>
+    <div class="kth-card">
+      <a href='/odpadky/{{_id}}/upravit'>
       {{#if imagePath}}
-        <div class="image" style="background-image: url({{imagePath}});"></div>
+        <img class="image" src="{{imagePath}}"/>
       {{else}}
-        <div class="image" style="background-image: url(/img/noimg.png);"></div>
+        <img class="image" src="/img/noimg.png"/>
       {{/if}}
-    </a>
-      <div class="pull-right">
-      {{#if occurence}}
-        {{#equals occurence 'CLICHE'}}KLIŠÉ{{/equals}}
-        {{#equals occurence 'NORMAL'}}TAK NORMÁL{{/equals}}
-        {{#equals occurence 'RARE'}}ŘÍDCE{{/equals}}
-      {{else}}
-        TAK NORMÁL
-      {{/if}}
-      {{#if symbol}}
-        | <i class="fa fa-recycle"></i>&nbsp;{{symbol}}
-      {{/if}}
-    </div>
-    <div class="card-block text-center" style="padding: 1.25rem 0;">
-      <h2 class="card-title">
-        {{!--<span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span>--}}
-        <a href='/odpadky/{{_id}}'>{{name}}</a>
-        {{#equals status 'PUBLIC'}}
-          <i class="fa fa-check" aria-hidden="true" style="color: #3BB053;"></i>
+      </a>
+      <div class="text-center">
+        {{!-- occurence --}}
+        {{#if occurence}}
+          {{#equals occurence 'CLICHE'}}KLIŠÉ{{/equals}}
+          {{#equals occurence 'NORMAL'}}TAK NORMÁL{{/equals}}
+          {{#equals occurence 'RARE'}}ŘÍDCE{{/equals}}
         {{else}}
-          <sup style="color: grey; font-size: small;">DRAFT</sup>
+          TAK NORMÁL
+        {{/if}}
+        | {{!-- symbol --}}
+        {{#if symbol}}<i class="fa fa-recycle"></i>&nbsp;{{symbol}}{{else}}<i class="fa fa-recycle" style="color:grey;"></i>{{/if}}
+        | {{!-- status --}}
+        {{#equals status 'PUBLIC'}}
+          <i class="fa fa-check" aria-hidden="true" style="color: #3BB053;"></i>PUBLIC
+        {{else}}
+          <span style="color: grey; font-size: small;">DRAFT</span>
         {{/equals}}
-      </h2>
-      <div class="fa-3x">
-        <a href="/odpadky/{{_id}}/upravit"><i class="fa fa-pencil-square-o" aria-hidden="true" title="upravit"></i></a>
-        <a href="/odpadky/{{_id}}/nahraj-obrazek"><i class="fa fa-picture-o" aria-hidden="true" title="nahrát obrázek"></i></a>
-        {{> trash/delete}}
-      </div>
-      <p class="card-text">{{{description}}}</p>
-    </div>
-  </div>
-  </div>
+      </div>{{!-- .pull-right --}}
+      <div class="card-block text-center" style="padding: 1.25rem 0;">
+        <h2 class="card-title">
+          {{!--<span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span>--}}
+          <a href='/odpadky/{{_id}}/upravit'>{{name}}</a>
+        </h2>
+        <p class="card-text">{{{description}}}</p>
+      </div>{{!-- .card-block --}}
+    </div>{{!-- .kth-card --}}
+</div>{{!-- .card --}}
 {{/odpadky}}
 </div>

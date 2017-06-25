@@ -10,7 +10,7 @@ var fs = require('fs-extra');
 var marked = require('marked');
 var _ = require('lodash');
 
-function mdnify(obj, items ) {
+function mdnify(obj, items) {
   for (var item of items) {
     if (typeof obj[item] === 'undefined') continue;
     obj[item] = marked(obj[item]);
@@ -202,16 +202,17 @@ router.put('/', function (req, res) {
 
 // read
 router.get('/:id', function (req, res) {
-  trash.read(req.params.id)
-    .then((odpadek) => {
-      if (!odpadek) {
-        // TODO show some "do you want to create message?"
-        res.redirect('/odpadky');
-      } else {
-        res.render('trash/show', mdnify(convertDates(odpadek), ['description', 'note']));
-      }
-    })
-    .catch(vyblejChybu(res));
+  res.redirect(`/odpadky/${req.params.id}/upravit`);
+  // trash.read(req.params.id)
+  //   .then((odpadek) => {
+  //     if (!odpadek) {
+  //       // TODO show some "do you want to create message?"
+  //       res.redirect('/odpadky');
+  //     } else {
+  //       res.render('trash/show', mdnify(convertDates(odpadek), ['description', 'note']));
+  //     }
+  //   })
+  //   .catch(vyblejChybu(res));
 });
 
 // update - get

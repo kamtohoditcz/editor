@@ -1,20 +1,25 @@
 <div class="container text-center" style="padding: 40px; background-color: #fafafa">
-<h1>{{name}}</h1>
-<div id="image-uploader" style="widht: 100%;">
-  <input id="fileupload" type="file" name="image" data-url="/odpadky/{{_id}}/nahraj-obrazek" style="display: none;">
-  <img id="dropzone" class="fade well" src="/img/clickordrop.png" style="width: 100%;">
-  <div id="progress" style="margin-top: -1px; width: 100%; max-width: 500px; background: #55a; display: none;">
-      <div class="bar" style="width: 0%; height: 1px; background: #aaf;"></div>
+
+  <h1>{{name}}</h1>
+
+  <div id="image-uploader" class="d-inline-block" style="{{#if imagePath}}background: black url({{imagePath}}) no-repeat center;{{/if}}">
+    <input id="fileupload" type="file" name="image" data-url="/odpadky/{{_id}}/nahraj-obrazek" style="display: none;">
+    <img id="dropzone" class="fade well" src="/img/clickordrop.png">
+    <div id="progress">
+        <div class="bar"></div>
+    </div>
   </div>
-</div>
 
-<blockquote>
-Nahrávadlo funguje do <b>10MB</b>. Po nahrání se obrázek zmenší na velikost 500x500px kolem části s největší entropií ;)
-</blockquote>
+  <blockquote>
+  Nahrávadlo funguje do <b>10MB</b>. Po nahrání se obrázek zmenší na velikost 500x500px
+  </blockquote>
 
-<a href="/odpadky/{{_id}}"> zpět na odpadek </a>
-| <a href="/odpadky/{{_id}}/upravit"> upravit odpadek </a>
-| <a href="/odpadky"> zpět na seznam odpadků </a>
+  <div class="row">
+    <a href="/odpadky/{{_id}}/upravit" class="btn btn-outline-warning"> zpět na odpadek </a>
+    <div>&nbsp;</div>
+    <a href="/odpadky" class="btn btn-outline-warning"> zpět na seznam odpadků </a>
+  </div> {{!-- .row --}}
+
 </div>
 
 
@@ -28,8 +33,12 @@ Nahrávadlo funguje do <b>10MB</b>. Po nahrání se obrázek zmenší na velikos
 <script src="/js/jquery.fileupload-image.js"></script>
 
 <style>
+#image-uploader {
+   width:500px;
+}
 #dropzone {
-  opacity: 1;
+  width: 100%;
+  opacity: 0.8;
   border: 5px solid #292929;
 }
 #dropzone.fade:hover {
@@ -48,7 +57,17 @@ Nahrávadlo funguje do <b>10MB</b>. Po nahrání se obrázek zmenší na velikos
     -ms-transition: all 0.3s ease-in-out;
     -o-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
-    opacity: 1;
+    opacity: 0.8;
+}
+#progress {
+  margin-top: -1px;
+  width: 100%;
+  max-width: 500px;
+  background: #55a;
+  display: none;
+}
+#progress .bar {
+   width: 0%; height: 10px; background: #aaf;
 }
 </style>
 
@@ -103,14 +122,6 @@ $(function () {
     // Allow only jp(e)g or png files
     acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
 
-    // Enable image resizing, except for Android and Opera,
-    // which actually support image resizing, but fail to
-    // send Blob objects via XHR requests:
-    disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
-    imageMaxWidth: 800,
-    imageMaxHeight: 800,
-    imageCrop: true, // Force cropped images
-
     // Callbacks
     add: function (e, data) {
       $('#progress .bar').css('width', '0%');
@@ -128,16 +139,17 @@ $(function () {
       $('#progress').hide();
       var $alert;
       if (data.result.error) {
+        console.log('Chyba nahrávání obrázku:', data);
         $alert = $('<div class="alert alert-danger" role="alert">'+data.result.error+'</div>').prependTo('#image-uploader');
-        setTimeout(function(){
-          $alert.hide('slow').remove();
-        }, 3000);
+        // setTimeout(function(){
+        //   $alert.hide('slow').remove();
+        // }, 3000);
       } else {
         $('#dropzone').attr('src', data.result.path);
         $alert = $('<div class="alert alert-success" role="alert"> Je to tam, díííík ;-)<br/>Za chvíli tě to přesměruje na ten odpadek. </div>').prependTo('#image-uploader');
         setTimeout(function(){
-          document.location = '/odpadky/{{_id}}';
-        }, 3000);
+          document.location = '/odpadky/{{_id}}/upravit';
+        }, 1000);
       }
     },
 
