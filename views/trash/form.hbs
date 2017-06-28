@@ -1,5 +1,12 @@
 <div class="container" style="padding: 40px; background-color: #fafafa">
 
+{{#if _id}}
+<form action="/odpadky/{{_id}}" method="post" enctype="application/x-www-form-urlencoded">
+{{else}}
+<form action="/odpadky" method="post" enctype="application/x-www-form-urlencoded">
+  <input type="hidden" value="PUT" name="_method" />
+{{/if}}
+
 <div class="row">
   <a href="#" class="btn btn-success mr-auto" onclick="$(this).closest('form').submit()"> uložit změny </a>
   <a href="/odpadky{{#if _id}}#{{_id}}{{/if}}" class="btn btn-outline-warning"> zpět na seznam odpadků (zahodí neuložené změny!) </a>
@@ -30,12 +37,6 @@
 {{/if}}
 </div>
 
-{{#if _id}}
-<form action="/odpadky/{{_id}}" method="post" enctype="application/x-www-form-urlencoded">
-{{else}}
-<form action="/odpadky" method="post" enctype="application/x-www-form-urlencoded">
-  <input type="hidden" value="PUT" name="_method" />
-{{/if}}
 
   {{!--
   <div class="form-group">
