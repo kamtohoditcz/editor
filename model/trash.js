@@ -23,7 +23,7 @@ module.exports = mytrash = {
   },
 
   create: function (losDatos) {
-    losDatos.creation_date = losDatos.last_edit_date = moment().format();
+    losDatos.creation_date = losDatos.last_edit_date = moment().toDate();
     return mongo.create(collectionName, losDatos)
       .then((result) => {
         console.log(`MONGO: Created: ` + JSON.stringify(result, null, 2))
@@ -40,7 +40,7 @@ module.exports = mytrash = {
   },
 
   update: function (id, losDatos) {
-    losDatos.last_edit_date = moment().format();
+    losDatos.last_edit_date = moment().toDate();
     return mongo.update(collectionName, id, losDatos)
       .then((result) => {
         console.log(`MONGO: Updated [${id}]: ` + JSON.stringify(result, null, 2));
