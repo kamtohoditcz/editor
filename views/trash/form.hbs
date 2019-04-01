@@ -19,7 +19,7 @@
 
 <div class="text-center">
 {{#if _id}}
-  <h1>Upraujeme "{{name}}"</h1>
+  <h1>Upraujeme "{{name}} / {{name_en}}"</h1>
 {{else}}
   <h1>Nový odpadek</h1>
 {{/if}}
@@ -54,7 +54,13 @@
       <small id="nameHelp" class="form-text text-muted pull-right"> Co nejvýstižnějsí jméno pro odpadek. </small>
     </div>
 
-    <div class="col-lg-8">
+    <div class="col-lg-4">
+      <label for="name_en"> NAME: </label>
+      <input type="input" id="name_en" name="name_en" class="form-control" placeholder="e.g.: pizza box" value="{{name_en}}" />
+      <small id="nameHelp" class="form-text text-muted pull-right"> Co nejvýstižnějsí jméno pro odpadek. </small>
+    </div>
+
+    <div class="col-lg-4">
       <label for="aliases"> ALIAS: </label>
       <input type="input" id="aliases" name="aliases" class="form-control" placeholder="například: pizzabox krabica na picu" value="{{aliases}}" />
       <small id="aliasesHelp" class="form-text text-muted pull-right">
@@ -175,6 +181,12 @@
         Prvních 160 znaků bude zobrazeno v seznamech odpadků, zbytek až na stránce detailu. </small>
     </div>
     <div class="col-lg-6">
+      <label for="description_en"> DESCRIPTION: </label>
+      <textarea id="description_en" name="description_en" class="form-control">{{description_en}}</textarea>
+      <small id="description_enHelp" class="form-text text-muted pull-right">Dodatečný popis k odpadku. Sem se píše na co jsme přišli.
+        Prvních 160 znaků bude zobrazeno v seznamech odpadků, zbytek až na stránce detailu. </small>
+    </div>
+    <div class="col-lg-12">
       <label for="note"> POZNÁMKA: </label>
       <textarea id="note" name="note" class="form-control">{{note}}</textarea>
       <small id="noteHelp" class="form-text text-muted pull-right">Pouze pro výzkum, nebude zobrazena na webu. </small>
@@ -209,6 +221,7 @@
   });
 
   var descriptionMde = new SimpleMDE({ element: $("textarea#description")[0] });
+  var description_enMde = new SimpleMDE({ element: $("textarea#description_en")[0] });
   var noteMde = new SimpleMDE({ element: $("textarea#note")[0] });
 
 });

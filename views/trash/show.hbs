@@ -13,7 +13,9 @@
 {{#if _id}}
   <h1>
     {{!-- <span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span> --}}
-    {{name}}
+
+    {{name}} / {{name_en}}
+
     {{#equals status 'PUBLIC'}}
       <i class="fa fa-check" aria-hidden="true" style="color: #3BB053;"></i>
     {{else}}
@@ -47,11 +49,18 @@ vytvořen {{creation_date}} {{#if creation_user}} uživatelem {{creation_user}}{
 
 {{#if description}}
   <div class="mdtext text-left">
-    {{!-- <h2> POPIS </h2> --}}
     {{{description}}}
   </div>
 {{else}}
   <p style="color: grey">Žádný popis</p>
+{{/if}}
+
+{{#if description_en}}
+  <div class="mdtext text-left">
+    {{{description_en}}}
+  </div>
+{{else}}
+  <p style="color: grey">No description</p>
 {{/if}}
 
 <hr/>

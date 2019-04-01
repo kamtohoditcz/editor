@@ -142,11 +142,16 @@
         {{/equals}}
       </div>{{!-- .pull-right --}}
       <div class="card-block text-center" style="padding: 1.25rem 0;">
-        <h2 class="card-title">
+        <a href='/odpadky/{{_id}}/upravit'>
           {{!--<span style="color: grey;">{{category}}{{#if category}}/{{/if}}</span>--}}
-          <a href='/odpadky/{{_id}}/upravit'>{{name}}</a>
-        </h2>
+          <h3 class="card-title">{{name}}</h3>
+        </a>
         <p class="card-text">{{{description}}}</p>
+        <hr>
+        <a href='/odpadky/{{_id}}/upravit'>
+          <h5>{{name_en}}</h5>
+        </a>
+        <p class="card-text">{{{description_en}}}</p>
       </div>{{!-- .card-block --}}
     </div>{{!-- .kth-card --}}
 </div>{{!-- .card --}}

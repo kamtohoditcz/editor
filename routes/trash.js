@@ -156,6 +156,7 @@ router.post('/:id/nahraj-obrazek', uploadImage, function (req, res) {
       .read(id)
       .then((odpadek) => {
         odpadek.imagePath = path;
+        odpadek = _.omit(odpadek, '_id');
         return trash.update(id, odpadek)
       })
       .then(() => {
