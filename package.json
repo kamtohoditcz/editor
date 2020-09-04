@@ -34,7 +34,7 @@
     "marked": "^0.3.19",
     "method-override": "^2.3.10",
     "moment": "^2.24.0",
-    "mongodb": "^2.2.29",
+    "mongodb": "^3.6.1",
     "morgan": "^1.9.1",
     "mustache": "^2.3.0",
     "mustache-express": "^1.2.4",
